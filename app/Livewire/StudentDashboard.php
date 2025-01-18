@@ -13,10 +13,10 @@ class StudentDashboard extends Component
     {
         return view('livewire.student-dashboard',[
             'announcements' => Announcement::orderByDesc('created_at')->get()->take(6),
-            'tasks' => Task::whereHas('taskAssignedStudents', function($record){
+            'tasks' => auth()->user()->student->trainee == null ? 0 : Task::whereHas('taskAssignedStudents', function($record){
                 $record->where('trainee_id', auth()->user()->student->trainee->id);
             })->where('status', '!=', 'Completed')->count(),
-            'absents' => Absent::where('trainee_id', auth()->user()->student->trainee->id)->count(),
+            'absents' => auth()->user()->student->trainee == null ? 0 : Absent::where('trainee_id', auth()->user()->student->trainee->id)->count(),
         ]);
     }
 }
