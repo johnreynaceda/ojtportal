@@ -23,9 +23,13 @@ class MyTask extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(Task::query()->whereHas('taskAssignedStudents', function($data){
-                $data->where('trainee_id', auth()->user()->student->trainee->id);
-            }))
+            ->query(
+                optional(auth()->user()->student)->trainee 
+        ? Task::query()->whereHas('taskAssignedStudents', function ($query) {
+            $query->where('trainee_id', auth()->user()->student->trainee->id);
+        })
+        : Task::query()->whereRaw('1 = 0')
+            )
             ->columns([
                 TextColumn::make('name')->label('NAME')->searchable(),
                 TextColumn::make('description')->label('DESCRIPTION')->searchable(),

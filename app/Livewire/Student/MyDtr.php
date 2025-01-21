@@ -32,9 +32,13 @@ class MyDtr extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(DailyTimeRecord::query()->where('trainee_id', auth()->user()->student->trainee->id))->headerActions([
-                Action::make('manage')->label('Manage Absent')->color('warning')->icon('heroicon-o-arrow-top-right-on-square')->iconPosition(IconPosition::After)->url(fn (): string => route('student.absent')),
-                CreateAction::make('add')->label('New DTR')->icon('heroicon-o-plus')->modalWidth('xl')->modalHeading('Create DTR')->form([
+            ->query(
+                optional(auth()->user()->student)->trainee 
+        ? DailyTimeRecord::query()->where('trainee_id', auth()->user()->student->trainee->id) 
+        : DailyTimeRecord::query()->whereRaw('1 = 0') // Ensures no records are returned
+            )->headerActions([
+                Action::make('manage')->disabled(!optional(auth()->user()->student)->trainee)->label('Manage Absent')->color('warning')->icon('heroicon-o-arrow-top-right-on-square')->iconPosition(IconPosition::After)->url(fn (): string => route('student.absent')),
+                CreateAction::make('add')->disabled(!optional(auth()->user()->student)->trainee)->label('New DTR')->icon('heroicon-o-plus')->modalWidth('xl')->modalHeading('Create DTR')->form([
                     Grid::make(2)->schema([
                         DatePicker::make('date')->required(),
                    
