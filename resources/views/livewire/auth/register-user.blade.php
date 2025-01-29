@@ -82,9 +82,19 @@
                             </div>
                         </div>
                         <div class=""><label
-                                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Major</label><input
-                                type="text" wire:model="major"
-                                class="flex w-full h-10 px-3 py-2 text-sm bg-white border rounded-md peer border-neutral-300 ring-offset-background placeholder:text-neutral-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50" />
+                                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Major</label>
+                            <select name="" id="" wire:model="major"
+                                class="flex w-full h-10 px-3 py-2 text-sm bg-white border rounded-md peer border-neutral-300 ring-offset-background placeholder:text-neutral-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50">
+                                <option value="">Select an Option</option>
+                                <option value="Intelligent System">Intelligent System</option>
+                                <option value="Graphics and Visualization">Graphics and Visualization</option>
+                                <option value="Animation and Motion Graphics">Animation and Motion Graphics</option>
+                                <option value="Network Administration">Network Administration</option>
+                                <option value="Service Management Program">Service Management Program</option>
+                                <option value="Web and Mobile Application Development">Web and Mobile Application
+                                    Development</option>
+                                <option value="None">None</option>
+                            </select>
                             <div class="text-sm text-red-500">
                                 @error('major')
                                     {{ $message }}

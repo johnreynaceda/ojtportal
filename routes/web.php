@@ -81,6 +81,9 @@ Route::prefix('student')->middleware(['auth', 'verified'])->group( function(){
     Route::get('/chat', function(){
         return view('student.chat');
     })->name('student.chat');
+    Route::get('/resume', function(){
+        return view('student.resume');
+    })->name('student.resume');
 });
 
 Route::prefix('supervisor')->middleware(['auth', 'verified'])->group( function(){
