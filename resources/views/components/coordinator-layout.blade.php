@@ -55,7 +55,7 @@
                     <div class="flex flex-col flex-grow px-4 ">
                         <center>
                             <img src="{{ asset('images/ccs_logo.jpg') }}" class="h-20 rounded-full" alt="">
-                            <h1 class="mt-2 text-lg font-bold text-white uppercase"> CCS OJT PORTAL</h1>
+                            <h1 class="mt-2 text-lg font-bold text-white uppercase"> CCS Internship Portal</h1>
 
                         </center>
                         <div>

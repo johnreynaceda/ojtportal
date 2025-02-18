@@ -64,6 +64,9 @@
                                 </div>
                             </li>
                         @empty
+                            <li>
+                                <p class="text-center text-gray-600">No announcements found.</p>
+                            </li>
                         @endforelse
 
                     </ul>

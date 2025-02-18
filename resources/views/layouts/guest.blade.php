@@ -27,7 +27,7 @@
                 <img src="{{ asset('images/school_logo.jpg') }}" class="h-20" alt="">
                 <img src="{{ asset('images/ccs_logo.jpg') }}" class="h-20" alt="">
             </div>
-            <div class="text-center mt-3 text-2xl text-gray-500 font-bold">CCS OJT PORTAL</div>
+            <div class="text-center mt-3 text-2xl text-gray-500 uppercase font-bold">CCS Internship Portal</div>
             <div class="mt-10">
                 {{ $slot }}
             </div>

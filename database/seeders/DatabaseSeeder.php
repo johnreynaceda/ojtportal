@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::create([
-            'name' => 'Coordinator1',
+            'name' => 'BSIS',
             'email' => 'coordinator1@gmail.com',
             'password' => bcrypt('password'),
             'user_type' => 'coordinator',
@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Bachelor of Science in Information Technology',
         ]);
         User::create([
-            'name' => 'Coordinator2',
+            'name' => 'BSIT',
             'email' => 'coordinator2@gmail.com',
             'password' => bcrypt('password'),
             'user_type' => 'coordinator',
@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::create([
-            'name' => 'Coordinator3',
+            'name' => 'BSCS',
             'email' => 'coordinator3@gmail.com',
             'password' => bcrypt('password'),
             'user_type' => 'coordinator',
