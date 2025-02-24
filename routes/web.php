@@ -54,6 +54,24 @@ Route::prefix('coordinator')->middleware(['auth', 'verified'])->group( function(
     Route::get('/announcement', function(){
         return view('coordinator.announcement');
     })->name('coordinator.announcement');
+    Route::get('/evaluation-form', function(){
+        return view('coordinator.evaluation-form');
+    })->name('coordinator.evaluation-form');
+    Route::get('/criteria-questions/{id}', function(){
+        return view('coordinator.criteria-questions');
+    })->name('coordinator.criteria-questions');
+    Route::get('/students-dtr', function(){
+        return view('coordinator.students-dtr');
+    })->name('coordinator.students-dtr');
+    Route::get('/view_attendance/{id}', function(){
+        return view('coordinator.view-attendance');
+    })->name('coordinator.view_attendance');
+    Route::get('/task-accomplishment', function(){
+        return view('coordinator.task');
+    })->name('coordinator.task');
+    Route::get('/view-task/{id}', function(){
+        return view('coordinator.view-task');
+    })->name('coordinator.view_task');
 });
 
 Route::prefix('student')->middleware(['auth', 'verified'])->group( function(){
@@ -84,6 +102,8 @@ Route::prefix('student')->middleware(['auth', 'verified'])->group( function(){
     Route::get('/resume', function(){
         return view('student.resume');
     })->name('student.resume');
+
+    
 });
 
 Route::prefix('supervisor')->middleware(['auth', 'verified'])->group( function(){
@@ -105,6 +125,12 @@ Route::prefix('supervisor')->middleware(['auth', 'verified'])->group( function()
     Route::get('/view_attendance/{id}', function(){
         return view('supervisor.view_attendance');
     })->name('supervisor.view_attendance');
+    Route::get('/ratings', function(){
+        return view('supervisor.ratings');
+    })->name('supervisor.ratings');
+    Route::get('/rating/student/{id}', function(){
+        return view('supervisor.rate-student');
+    })->name('supervisor.rate-student');
    
 });
 

@@ -7,6 +7,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
+use Filament\Support\Enums\IconPosition;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
@@ -17,7 +18,7 @@ use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
-class AttendanceList extends Component implements HasForms, HasTable
+class StudentRate extends Component implements HasForms, HasTable
 {
     use InteractsWithTable;
     use InteractsWithForms;
@@ -29,24 +30,26 @@ class AttendanceList extends Component implements HasForms, HasTable
             ->columns([
                 TextColumn::make('student.student_id')->label('STUDENT ID')->searchable()->sortable(),
                 TextColumn::make('id')->label('FULLNAME')->formatStateUsing(fn($record) => $record->student->lastname.', '. $record->student->firstname )->searchable()->sortable(),
+                TextColumn::make('student.major')->label('MAJOR')->searchable()->sortable(),
+                TextColumn::make('student.course.name')->label('COURSE')->searchable()->sortable(),
                 TextColumn::make('student.section')->label('SECTION')->searchable()->sortable(),
-                TextColumn::make('student.id')->label('SPENT')->searchable()->sortable()->formatStateUsing(
-                    function($record){
-                        return $record->dailyTimeRecords->where('status', 'Approved')->sum('total_hours');
-                    }
-                ),
-                TextColumn::make('student_id')->label('REMAINING')->searchable()->sortable()->formatStateUsing(
-                    function($record){
-                        $approved_dtr = $record->dailyTimeRecords->where('status', 'Approved')->sum('total_hours');
-                        return 400 - $approved_dtr;
-                    }
-                ),
+                // TextColumn::make('status')->label('STATUS')->searchable()->badge()->color(fn (string $state): string => match ($state) {
+                //     'On-the-job training' => 'gray',
+                //     'Completed' => 'success',
+                // })->icon(fn (string $state): string => match ($state) {
+                //     'On-the-job training' => 'heroicon-s-briefcase',
+                //     'Completed' => 'heroicon-s-check-circle',
+                // }),
+                
+               
+               
+                
             ])
             ->filters([
                 // ...
             ])
             ->actions([
-             Action::make('view')->label('View DTR')->button()->color('warning')->icon('heroicon-o-eye')->outlined()->url(fn ($record): string => route('supervisor.view_attendance', ['id' => $record->id]))
+                Action::make('evaluate')->button()->icon('heroicon-m-sparkles')->iconPosition(IconPosition::After)->url(fn($record) => route('supervisor.rate-student', ['id' => $record->student->id])),
             ])
             ->bulkActions([
                 // ...
@@ -55,6 +58,6 @@ class AttendanceList extends Component implements HasForms, HasTable
 
     public function render()
     {
-        return view('livewire.supervisor.attendance-list');
+        return view('livewire.supervisor.student-rate');
     }
 }
