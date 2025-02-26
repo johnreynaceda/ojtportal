@@ -131,6 +131,9 @@ Route::prefix('supervisor')->middleware(['auth', 'verified'])->group( function()
     Route::get('/rating/student/{id}', function(){
         return view('supervisor.rate-student');
     })->name('supervisor.rate-student');
+    Route::get('/manage-absents', function(){
+        return view('supervisor.absents');
+    })->name('supervisor.absents');
    
 });
 

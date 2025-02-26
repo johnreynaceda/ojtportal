@@ -31,13 +31,18 @@
                 approves your account.
             </p>
             <div class="mt-5">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <x-button href="route('logout')"
-                        onclick="event.preventDefault();
-                                this.closest('form').submit();"
-                        label="Logout" negative rounded lg class="font-semibold" right-icon="arrow-uturn-right" />
-                </form>
+                @if (auth()->user()->is_approved)
+                    <x-button href="{{ route('dashboard') }}" label="Dashboard" positive rounded lg
+                        class="font-semibold" right-icon="arrow-uturn-right" />
+                @else
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <x-button href="route('logout')"
+                            onclick="event.preventDefault();
+                                    this.closest('form').submit();"
+                            label="Logout" negative rounded lg class="font-semibold" right-icon="arrow-uturn-right" />
+                    </form>
+                @endif
             </div>
         </div>
     </section>

@@ -7,8 +7,10 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
+use Filament\Support\Enums\IconPosition;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -25,7 +27,9 @@ class AttendanceList extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(Trainee::query()->where('supervisor_id', auth()->user()->supervisor->id))
+            ->query(Trainee::query()->where('supervisor_id', auth()->user()->supervisor->id))->headerActions([
+                Action::make('manage_absent')->label('Manage Absents')->icon('heroicon-o-adjustments-horizontal')->iconPosition(IconPosition::After)->url(fn() => route('supervisor.absents'))
+            ])
             ->columns([
                 TextColumn::make('student.student_id')->label('STUDENT ID')->searchable()->sortable(),
                 TextColumn::make('id')->label('FULLNAME')->formatStateUsing(fn($record) => $record->student->lastname.', '. $record->student->firstname )->searchable()->sortable(),

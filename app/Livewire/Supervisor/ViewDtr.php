@@ -67,7 +67,7 @@ class ViewDtr extends Component implements HasForms, HasTable
                         ]);
                     }
                 ),
-               ])
+               ])->hidden(auth()->user()->user_type == 'coordinator')
             ])
             ->bulkActions([
                

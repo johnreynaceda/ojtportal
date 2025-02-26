@@ -37,7 +37,7 @@ class TaskList extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(Task::query())->headerActions(
+            ->query(Task::query()->where('supervisor_id', auth()->user()->id))->headerActions(
                [
                 CreateAction::make('new')->label('New Tasks')->icon('heroicon-o-plus')->form([
                     Grid::make(2)->schema([

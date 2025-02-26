@@ -68,7 +68,7 @@ class ViewRequirement extends Component implements HasForms, HasTable
                             ]);
                         }
                     ),
-                    ])
+                    ])->hidden(fn($record) => $record->status == 'approved')
             ])
             ->bulkActions([
                 // ...

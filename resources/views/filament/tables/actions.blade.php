@@ -7,8 +7,9 @@
         <x-mini-button rounded icon="eye" warning />
     @else
         <x-mini-button rounded icon="eye" warning wire:click="view({{ $getRecord()->id }})" />
-        <x-mini-button rounded icon="check-badge" wire:click="updateStatus({{ $getRecord()->id }})"
+        <x-mini-button rounded :disabled="$getRecord()->is_approved" icon="check-badge" wire:click="updateStatus({{ $getRecord()->id }})"
             spinner="updateStatus({{ $getRecord()->id }})" positive />
+
         <x-mini-button rounded icon="x-circle" negative />
     @endif
 
