@@ -15,8 +15,7 @@
         <div class="mt-5" x-ref="printContainer">
             <div class="h-64 flex relative space-x-20 items-center justify-center w-full bg-main">
                 <div class="  border h-56 w-56 absolute left-10 top-[3rem] bg-gray-400 ">
-                    <img src="{{ Storage::url(auth()->user()->resume->photo) }}" class="h-full w-full object-cover"
-                        alt="">
+                    <img src="{{ Storage::url(auth()->user()->resume->photo) }}" class="h-full w-full object-cover" alt="">
                 </div>
                 <div class="w-40">
 
@@ -41,40 +40,39 @@
 
                             @endphp
                             <li class="flex space-x-2 item-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-mail">
                                     <rect width="20" height="16" x="2" y="4" rx="2" />
                                     <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                                 </svg>
                                 <span>{{ $contact['email'] }}</span>
                             </li>
                             <li class="flex space-x-2 item-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-phone">
                                     <path
                                         d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                                 </svg>
                                 <span>{{ $contact['phone'] }}</span>
                             </li>
                             <li class="flex space-x-2 item-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin-house">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-map-pin-house">
                                     <path
                                         d="M15 22a1 1 0 0 1-1-1v-4a1 1 0 0 1 .445-.832l3-2a1 1 0 0 1 1.11 0l3 2A1 1 0 0 1 22 17v4a1 1 0 0 1-1 1z" />
-                                    <path
-                                        d="M18 10a8 8 0 0 0-16 0c0 4.993 5.539 10.193 7.399 11.799a1 1 0 0 0 .601.2" />
+                                    <path d="M18 10a8 8 0 0 0-16 0c0 4.993 5.539 10.193 7.399 11.799a1 1 0 0 0 .601.2" />
                                     <path d="M18 22v-3" />
                                     <circle cx="10" cy="10" r="3" />
                                 </svg>
                                 <span>{{ $contact['address'] }}</span>
                             </li>
                             <li class="flex space-x-2 item-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-globe">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-globe">
                                     <circle cx="12" cy="12" r="10" />
                                     <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
                                     <path d="M2 12h20" />
@@ -148,11 +146,17 @@
                                     $skill = json_decode(auth()->user()->resume->work_experience, true);
                                 @endphp
                                 @foreach ($skill as $item)
+
                                     <li class="">
                                         <p class="font-semibold">{{ $item['name'] }}</p>
                                         <p>{{ $item['type_of_work'] }}</p>
-                                        <p>{{ \Carbon\Carbon::parse($item['date_from'])->format('F Y') }} -
-                                            {{ $item['present'] ? 'Present' : \Carbon\Carbon::parse($item['date_to'])->format('F Y') }}
+                                        <p>
+                                            {{ \Carbon\Carbon::parse($item['date_from'])->format('F Y') }} -
+                                            @if($item['present'] ?? false) <!-- Use null coalescing operator -->
+                                                Present
+                                            @else
+                                                {{ \Carbon\Carbon::parse($item['date_to'])->format('F Y') }}
+                                            @endif
                                         </p>
                                     </li>
                                 @endforeach
