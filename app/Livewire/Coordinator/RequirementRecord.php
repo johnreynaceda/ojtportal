@@ -15,6 +15,7 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -27,26 +28,33 @@ class RequirementRecord extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(StudentRequirement::query()->whereHas('student', function($query){
+    ->query(
+        StudentRequirement::query()
+            ->whereHas('student', function ($query) {
                 $query->where('course_id', auth()->user()->course_id);
-            })->groupBy('student_id'))
-            ->columns([
-                TextColumn::make('student.student_id')->label('ID NO.')->searchable(),
-                TextColumn::make('student.user.name')->label('NAME')->searchable(),
-                TextColumn::make('student.major')->label('MAJOR')->searchable(),
-                TextColumn::make('student.section')->label('SECTION')->searchable(),
-                ViewColumn::make('requirements')->label('REQUIREMENTS')->view('filament.tables.requirement'),
-                ViewColumn::make('requirement_status')->label('STATUS')->view('filament.tables.requirement_status'),
-            ])
-            ->filters([
-                // ...
-            ])
-            ->actions([
-               
-            ])
-            ->bulkActions([
-                // ...
-            ]);
+            })
+            ->with('student') // Make sure to eager load student relationship
+            ->select('student_id', DB::raw('MAX(id) as id')) // Get the latest requirement
+            ->groupBy('student_id') // Group by student_id
+    )
+    ->columns([
+        TextColumn::make('student.student_id')->label('ID NO.')->searchable(),
+        TextColumn::make('student.user.name')->label('NAME')->searchable(),
+        TextColumn::make('student.major')->label('MAJOR')->searchable(),
+        TextColumn::make('student.section')->label('SECTION')->searchable(),
+        ViewColumn::make('requirements')->label('REQUIREMENTS')->view('filament.tables.requirement'),
+        ViewColumn::make('requirement_status')->label('STATUS')->view('filament.tables.requirement_status'),
+    ])
+    ->filters([
+        // Your filters...
+    ])
+    ->actions([
+        // Your actions...
+    ])
+    ->bulkActions([
+        // Your bulk actions...
+    ]);
+
     }
 
     public function render()
