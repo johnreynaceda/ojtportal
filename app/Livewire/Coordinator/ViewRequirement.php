@@ -4,6 +4,8 @@ namespace App\Livewire\Coordinator;
 
 use App\Models\Student;
 use App\Models\StudentRequirement;
+use App\Models\UserLog;
+use Carbon\Carbon;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -29,7 +31,8 @@ class ViewRequirement extends Component implements HasForms, HasTable
     public $student_id;
     public $student_name;
 
-    public function  mount(){
+    public function mount()
+    {
         $this->student_id = request('id');
         $this->student_name = Student::where('id', $this->student_id)->first()->user->name;
     }
@@ -43,7 +46,7 @@ class ViewRequirement extends Component implements HasForms, HasTable
                     fn($record) => strtoupper($record->name)
                 ),
                 ViewColumn::make('id')->label('FILE')->view('filament.tables.file'),
-                TextColumn::make('status')->label('STATUS')->searchable()->badge()->color(fn (string $state): string => match ($state) {
+                TextColumn::make('status')->label('STATUS')->searchable()->badge()->color(fn(string $state): string => match ($state) {
                     'pending' => 'warning',
                     'approved' => 'success',
                     'rejected' => 'danger',
@@ -55,20 +58,34 @@ class ViewRequirement extends Component implements HasForms, HasTable
             ->actions([
                 ActionGroup::make([
                     Action::make('approve')->label('Approve')->icon('heroicon-o-hand-thumb-up')->color('success')->action(
-                        function($record){
+                        function ($record) {
                             $record->update([
                                 'status' => 'approved'
+                            ]);
+
+                            UserLog::create([
+                                'user_type' => auth()->user()->user_type,
+                                'username' => auth()->user()->name,
+                                'date' => Carbon::now(),
+                                'activity' => 'Approve ' . $record->name . ' of ' . $record->student->user->name,
                             ]);
                         }
                     ),
                     Action::make('reject')->label('Reject')->icon('heroicon-o-hand-thumb-down')->color('danger')->action(
-                        function($record){
+                        function ($record) {
                             $record->update([
                                 'status' => 'rejected'
                             ]);
+
+                            UserLog::create([
+                                'user_type' => auth()->user()->user_type,
+                                'username' => auth()->user()->name,
+                                'date' => Carbon::now(),
+                                'activity' => 'Reject ' . $record->name . ' of ' . $record->student->user->name,
+                            ]);
                         }
                     ),
-                    ])->hidden(fn($record) => $record->status == 'approved')
+                ])->hidden(fn($record) => $record->status == 'approved')
             ])
             ->bulkActions([
                 // ...

@@ -189,9 +189,12 @@
 
 
                     </div>
-                    <div class="flex items-center p-6 pt-0"><button wire:click="registerStudent"
+                    <div class="flex items-center p-6 pt-0">
+                        {{-- <button wire:click="registerStudent"
                             class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium tracking-wide text-white transition-colors duration-200 rounded-md bg-gray-700 hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none">Register
-                            Account</button>
+                            Account</button> --}}
+                        <x-button label="Register Account" slate class="font-semibold" wire:click="registerStudent"
+                            spinner="registerStudent" />
                     </div>
                 </div>
                 <!-- End Tab Content 1 -->
@@ -287,9 +290,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex items-center p-6 pt-0"><button wire:click="registerSupervisor"
+                    <div class="flex items-center p-6 pt-0">
+                        {{-- <button wire:click="registerSupervisor"
                             class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium tracking-wide text-white transition-colors duration-200 rounded-md bg-gray-700 hover:bg-neutral-900 focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 focus:shadow-outline focus:outline-none">Register
-                            Account</button>
+                            Account</button> --}}
+
+                        <x-button label="Register Account" slate class="font-semibold"
+                            wire:click="registerSupervisor" spinner="registerSupervisor" />
                     </div>
                 </div>
                 <!-- End Tab Content 2 -->

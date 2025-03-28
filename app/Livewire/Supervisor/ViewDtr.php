@@ -4,6 +4,7 @@ namespace App\Livewire\Supervisor;
 
 use App\Models\DailyTimeRecord;
 use App\Models\Trainee;
+use App\Models\UserLog;
 use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
@@ -42,7 +43,7 @@ class ViewDtr extends Component implements HasForms, HasTable
                 TextColumn::make('pm_time_in')->label('PM TIME-IN')->date('h:i A')->searchable(),
                 TextColumn::make('pm_time_out')->label('PM TIME-OUT')->date('h:i A')->searchable(),
                 TextColumn::make('total_hours')->label('TOTAL HOURS')->searchable(),
-                TextColumn::make('status')->badge()->label('STATUS')->searchable()->color(fn (string $state): string => match ($state) {
+                TextColumn::make('status')->badge()->label('STATUS')->searchable()->color(fn(string $state): string => match ($state) {
                     'Pending' => 'warning',
                     'Approved' => 'success',
                     'Rejected' => 'danger',
@@ -52,31 +53,44 @@ class ViewDtr extends Component implements HasForms, HasTable
                 // ...
             ])
             ->actions([
-               ActionGroup::make([
-                Action::make('approve')->icon('heroicon-s-hand-thumb-up')->color('success')->action(
-                    function($record){
-                        $record->update([
-                            'status' => 'Approved'
-                        ]);
-                    }
-                ),
-                Action::make('reject')->icon('heroicon-s-hand-thumb-down')->color('danger')->action(
-                    function($record){
-                        $record->update([
-                            'status' => 'Rejected'
-                        ]);
-                    }
-                ),
-               ])->hidden(auth()->user()->user_type == 'coordinator')
+                ActionGroup::make([
+                    Action::make('approve')->icon('heroicon-s-hand-thumb-up')->color('success')->action(
+                        function ($record) {
+                            $record->update([
+                                'status' => 'Approved'
+                            ]);
+                            UserLog::create([
+                                'user_type' => auth()->user()->user_type,
+                                'username' => auth()->user()->name,
+                                'date' => Carbon::now(),
+                                'activity' => 'Approve DTR of ' . $this->trainee_name,
+                            ]);
+                        }
+                    ),
+                    Action::make('reject')->icon('heroicon-s-hand-thumb-down')->color('danger')->action(
+                        function ($record) {
+                            $record->update([
+                                'status' => 'Rejected'
+                            ]);
+                            UserLog::create([
+                                'user_type' => auth()->user()->user_type,
+                                'username' => auth()->user()->name,
+                                'date' => Carbon::now(),
+                                'activity' => 'Reject DTR of ' . $this->trainee_name,
+                            ]);
+                        }
+                    ),
+                ])->hidden(auth()->user()->user_type == 'coordinator')
             ])
             ->bulkActions([
-               
+
             ]);
     }
 
-   
 
-    public function mount(){
+
+    public function mount()
+    {
         $this->trainee_id = request('id');
         $trainee = Trainee::where('id', $this->trainee_id)->first();
         $this->trainee_name = $trainee->student->user->name;

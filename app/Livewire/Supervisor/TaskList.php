@@ -5,6 +5,7 @@ namespace App\Livewire\Supervisor;
 use App\Models\Task;
 use App\Models\TaskAssignedStudent;
 use App\Models\Trainee;
+use App\Models\UserLog;
 use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
@@ -32,53 +33,61 @@ class TaskList extends Component implements HasForms, HasTable
     use InteractsWithTable;
     use InteractsWithForms;
 
-    public  $rating = 0;
+    public $rating = 0;
 
     public function table(Table $table): Table
     {
         return $table
-            ->query(Task::query()->where('supervisor_id', auth()->user()->id))->headerActions(
-               [
-                CreateAction::make('new')->label('New Tasks')->icon('heroicon-o-plus')->form([
-                    Grid::make(2)->schema([
-                        TextInput::make('name')->required(),
-                        DatePicker::make('due_date'),
-                        Textarea::make('description')->columnSpan(2),
-                        Select::make('trainees')->options(
-                            Trainee::where('supervisor_id', auth()->user()->supervisor->id)->get()->mapWithKeys(
-                                function ($trainee) {
-                                    return [$trainee->id => $trainee->student->firstname. ' '. $trainee->student->lastname];
+            ->query(Task::query()->where('supervisor_id', auth()->user()->supervisor->id))->headerActions(
+                [
+                    CreateAction::make('new')->label('New Tasks')->icon('heroicon-o-plus')->form([
+                        Grid::make(2)->schema([
+                            TextInput::make('name')->required(),
+                            DatePicker::make('due_date'),
+                            Textarea::make('description')->columnSpan(2),
+                            Select::make('trainees')->options(
+                                Trainee::where('supervisor_id', auth()->user()->supervisor->id)->get()->mapWithKeys(
+                                    function ($trainee) {
+                                        return [$trainee->id => $trainee->student->firstname . ' ' . $trainee->student->lastname];
+                                    }
+                                ),
+                            )->multiple()->columnSpan(2),
+                        ])
+                    ])->modalWidth('xl')->action(
+                            function ($data) {
+
+                                $task = Task::create([
+                                    'supervisor_id' => auth()->user()->supervisor->id, // Correct assignment
+                                    'name' => $data['name'],
+                                    'due_date' => Carbon::parse($data['due_date']),
+                                    'description' => $data['description'],
+                                ]);
+
+                                // Iterate over the trainees and assign them to the task
+                                foreach ($data['trainees'] as $traineeId) {
+                                    TaskAssignedStudent::create([
+                                        'task_id' => $task->id,
+                                        'trainee_id' => $traineeId,
+                                    ]);
+
                                 }
-                            ),
-                        )->multiple()->columnSpan(2),
-                    ])
-                ])->modalWidth('xl')->action(
-                    function($data){
-                     
-                        $task = Task::create([
-                            'supervisor_id' => auth()->user()->supervisor->id, // Correct assignment
-                            'name' => $data['name'],
-                            'due_date' => Carbon::parse($data['due_date']),
-                            'description' => $data['description'],
-                        ]);
-                        
-                        // Iterate over the trainees and assign them to the task
-                        foreach ($data['trainees'] as $traineeId) {
-                            TaskAssignedStudent::create([
-                                'task_id' => $task->id,
-                                'trainee_id' => $traineeId,
-                            ]);
-                        }
-                    }
-                )
-               ]
+
+                                UserLog::create([
+                                    'user_type' => auth()->user()->user_type,
+                                    'username' => auth()->user()->name,
+                                    'date' => Carbon::now(),
+                                    'activity' => 'Create a Task',
+                                ]);
+                            }
+                        )
+                ]
             )
             ->columns([
                 TextColumn::make('name')->label('TASK NAME')->searchable(),
                 TextColumn::make('description')->label('DESCRIPTION')->searchable(),
                 ViewColumn::make('id')->label('ASSIGNED')->view('filament.tables.assigned'),
                 TextColumn::make('due_date')->label('DUE DATE')->date()->searchable(),
-                TextColumn::make('status')->badge()->label('STATUS')->searchable()->color(fn (string $state): string => match ($state) {
+                TextColumn::make('status')->badge()->label('STATUS')->searchable()->color(fn(string $state): string => match ($state) {
                     'In Progress' => 'warning',
                     'Completed' => 'success',
                     'Delayed' => 'danger',
@@ -88,20 +97,40 @@ class TaskList extends Component implements HasForms, HasTable
                 // ...
             ])
             ->actions([
-               ActionGroup::make([
-                Action::make('rate')->name('Rating')->icon('heroicon-o-star')->color('warning')->visible(fn($record) => $record->status != 'In Progress' && $record->rate == null)->form([
-                ViewField::make('rating')
-                    ->view('filament.forms.rating')
-                ])->modalWidth('xl')->action(
-                    function($record){
-                        $record->update([
-                            'rate' => $this->rating,
-                        ]);
-                    }
-                ),
-                EditAction::make('edit')->color('success'),
-                DeleteAction::make('delete')
-               ])
+                ActionGroup::make([
+                    Action::make('rate')->name('Rating')->icon('heroicon-o-star')->color('warning')->visible(fn($record) => $record->status != 'In Progress' && $record->rate == null)->form([
+                        ViewField::make('rating')
+                            ->view('filament.forms.rating')
+                    ])->modalWidth('xl')->action(
+                            function ($record) {
+                                $record->update([
+                                    'rate' => $this->rating,
+                                ]);
+
+                                UserLog::create([
+                                    'user_type' => auth()->user()->user_type,
+                                    'username' => auth()->user()->name,
+                                    'date' => Carbon::now(),
+                                    'activity' => 'Rate' . $record->name . 'task.',
+                                ]);
+                            }
+                        ),
+                    // EditAction::make('edit')->color('success'),
+                    DeleteAction::make('delete')->action(
+                        function ($record) {
+                            $record->delete();
+
+                            UserLog::create([
+                                'user_type' => auth()->user()->user_type,
+                                'username' => auth()->user()->name,
+                                'date' => Carbon::now(),
+                                'activity' => 'Delete ' . $record->name . 'task.',
+                            ]);
+
+
+                        }
+                    )
+                ])
             ])
             ->bulkActions([
                 // ...
@@ -110,7 +139,7 @@ class TaskList extends Component implements HasForms, HasTable
 
     public function render()
     {
-       
+
         return view('livewire.supervisor.task-list');
     }
 }

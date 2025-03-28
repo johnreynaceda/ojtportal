@@ -7,6 +7,7 @@ use App\Models\Trainee;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\Action;
@@ -28,43 +29,46 @@ class ManageAbsent extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(Absent::query()->whereHas('trainee', function($query){
+            ->query(Absent::query()->whereHas('trainee', function ($query) {
                 $query->where('supervisor_id', auth()->user()->supervisor->id);
             }))->headerActions([
-                Action::make('back')->color('gray')->url(fn($record) => route('supervisor.attendance')),
-                CreateAction::make('new')->icon(
-                    'heroicon-o-plus'
-                )->form([
-                    Select::make('trainee_id')->label('Trainee')->options(
-                        Trainee::where('supervisor_id', auth()->user()->supervisor->id)->get()->mapWithKeys(
-                            function ($trainee) {
-                                return [$trainee->id => $trainee->student->user->name];
+                    Action::make('back')->color('gray')->url(fn($record) => route('supervisor.attendance')),
+                    CreateAction::make('new')->icon(
+                        'heroicon-o-plus'
+                    )->form([
+                                Select::make('trainee_id')->label('Trainee')->options(
+                                    Trainee::where('supervisor_id', auth()->user()->supervisor->id)->get()->mapWithKeys(
+                                        function ($trainee) {
+                                            return [$trainee->id => $trainee->student->user->name];
+                                        }
+                                    )
+                                ),
+                                DatePicker::make('date_of_absent')->required(),
+                                TextInput::make('total_hours')->numeric()->required(),
+                                Textarea::make('reason')->required(),
+                            ])->modalWidth('xl')->action(
+                            function ($data) {
+                                Absent::create([
+                                    'trainee_id' => $data['trainee_id'],
+                                    'date_of_absent' => $data['date_of_absent'],
+                                    'reason' => $data['reason'],
+                                    'total_hour' => $data['total_hours'],
+                                ]);
                             }
                         )
-                        ),
-                    DatePicker::make('date_of_absent')->required(),
-                    Textarea::make('reason')->required(),
-                ])->modalWidth('xl')->action(
-                    function($data){
-                        Absent::create([
-                            'trainee_id' => $data['trainee_id'],
-                            'date_of_absent' => $data['date_of_absent'],
-                           'reason' => $data['reason'],
-                        ]);
-                    }
-                )
-            ])
+                ])
             ->columns([
                 TextColumn::make('trainee.student.user.name')->label('TRAINEE')->searchable(),
                 TextColumn::make('date_of_absent')->date()->label('DATE OF ABSENT')->searchable(),
+                TextColumn::make('total_hour')->label('TOTAL HOUR')->searchable(),
                 TextColumn::make('reason')->label('REASON')->searchable(),
             ])
             ->filters([
                 // ...
             ])
             ->actions([
-            //    EditAction::make('edit')->color('success'),
-               DeleteAction::make('delete'),
+                //    EditAction::make('edit')->color('success'),
+                DeleteAction::make('delete'),
             ])
             ->bulkActions([
                 // ...

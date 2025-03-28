@@ -8,23 +8,28 @@ class Trainee extends Model
 {
     protected $guarded = [];
 
-    public function student(){
+    public function student()
+    {
         return $this->belongsTo(Student::class);
     }
 
-    public function supervisor(){
+    public function supervisor()
+    {
         return $this->belongsTo(Supervisor::class);
     }
 
-    public function taskAssignedStudents(){
+    public function taskAssignedStudents()
+    {
         return $this->hasMany(TaskAssignedStudent::class);
     }
 
-    public function dailyTimeRecords(){
+    public function dailyTimeRecords()
+    {
         return $this->hasMany(DailyTimeRecord::class);
     }
 
-    public function absents(){
+    public function absents()
+    {
         return $this->hasMany(Absent::class);
     }
 }

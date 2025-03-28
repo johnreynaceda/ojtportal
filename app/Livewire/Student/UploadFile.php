@@ -4,6 +4,8 @@ namespace App\Livewire\Student;
 
 use App\Models\StudentRequirement;
 use App\Models\Post;
+use App\Models\UserLog;
+use Carbon\Carbon;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\MarkdownEditor;
@@ -29,7 +31,8 @@ class UploadFile extends Component implements HasForms
             ]);
     }
 
-    public function uploadFile(){
+    public function uploadFile()
+    {
         $data = StudentRequirement::where('id', $this->file_id)->first();
         foreach ($this->upload as $key => $value) {
             $data->update([
@@ -38,10 +41,18 @@ class UploadFile extends Component implements HasForms
             ]);
         }
 
+        UserLog::create([
+            'user_type' => auth()->user()->user_type,
+            'username' => auth()->user()->name,
+            'date' => Carbon::now(),
+            'activity' => 'Submit ' . $this->file_name,
+        ]);
+
         return redirect()->route('student.requirement.edited-docs');
     }
 
-    public function mount(){
+    public function mount()
+    {
         $this->file_id = request('id');
         $data = StudentRequirement::where('id', $this->file_id)->first();
         $this->file_name = $data->name;

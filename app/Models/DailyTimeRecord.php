@@ -8,7 +8,8 @@ class DailyTimeRecord extends Model
 {
     protected $guarded = [];
 
-    public function trainee(){
+    public function trainee()
+    {
         return $this->belongsTo(Trainee::class);
     }
 }

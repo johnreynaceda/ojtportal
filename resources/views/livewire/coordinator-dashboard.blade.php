@@ -74,100 +74,193 @@
             </div>
         </div>
     </div>
-    <div class="grid mt-10 grid-cols-2 gap-5">
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <div class="bg-white h-96 rounded-2xl ">
-            <div class=" h-full p-5">
-                <h1 class="mb-5 font-bold text-main uppercase">Task Rating</h1>
-                <canvas id="lineChart" class="h-full"></canvas>
-                <script>
-                    const ctx = document.getElementById('lineChart').getContext('2d');
-                    const lineChart = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'], // X-axis labels
-                            datasets: [{
-                                label: 'Sales Data',
-                                data: [65, 59, 80, 81, 56, 55, 40], // Y-axis data
-                                borderColor: 'rgba(75, 192, 192, 1)',
-                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                tension: 0.4 // For a smooth curve
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    display: true,
-                                    position: 'top'
-                                },
-                                tooltip: {
-                                    enabled: true
-                                }
-                            },
-                            scales: {
-                                x: {
-                                    beginAtZero: true
-                                },
-                                y: {
-                                    beginAtZero: true
-                                }
-                            }
-                        }
-                    });
-                </script>
-            </div>
+    <div class="mt-10">
+        <div class="bg-white p-5 rounded-xl">
+            <h1 class="mb-5 font-bold text-main uppercase">Top Performing Students</h1>
+            <div class="max-h-96 overflow-y-auto">
+                <div class="flex flex-col">
+                    <div class=" overflow-x-auto">
+                        <div class="min-w-full inline-block align-middle">
+                            <div class="overflow-hidden border rounded-lg border-gray-300">
+                                <table class="min-w-full rounded-xl">
+                                    <thead>
+                                        <tr class="bg-gray-50">
+                                            <th
+                                                class="p-2 w-10 text-left text-sm font-semibold text-gray-900 px-4 uppercase">
+                                                Rank</th>
+                                            <th
+                                                class="p-2 text-left text-sm font-semibold text-gray-900 px-4 uppercase">
+                                                Name</th>
+                                            <th
+                                                class="p-2 w-40 text-left text-sm font-semibold text-gray-900 px-4 uppercase">
+                                                Task Rating (20%)</th>
+                                            <th
+                                                class="p-2 w-20 text-left text-sm font-semibold text-gray-900 px-4 uppercase">
+                                                Attendance Rate (10%)</th>
+                                            <th
+                                                class="p-2 w-40 text-left text-sm font-semibold text-gray-900 px-4 uppercase">
+                                                Journal Rate (10%)</th>
+                                            <th
+                                                class="p-2 w-20 text-left text-sm font-semibold text-gray-900 px-4 uppercase">
+                                                Coordinator Rate (30%)</th>
+                                            <th
+                                                class="p-2 w-20 text-left text-sm font-semibold text-gray-900 px-4 uppercase">
+                                                Supervisor Rate (30%)</th>
+                                            <th
+                                                class="p-2 w-20 text-left text-sm font-semibold text-gray-900 px-4 uppercase">
+                                                Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-300">
+                                        @foreach ($performings as $student)
+                                            <tr>
+                                                <td class="p-2 px-4 text-sm font-medium text-gray-900">
+                                                    {{ $student['rank'] }}</td>
+                                                <td class="p-2 px-4 text-sm font-medium text-gray-900">
+                                                    {{ $student['name'] }}</td>
+                                                <td class="p-2 px-4 text-sm font-medium text-gray-900">
+                                                    {{ $student['task_rating'] }}</td>
+                                                <td class="p-2 px-4 text-sm font-medium text-gray-900">
+                                                    {{ $student['attendance_rate'] }}</td>
+                                                <td class="p-2 px-4 text-sm font-medium text-gray-900">
+                                                    {{ $student['journal_rate'] }}</td>
+                                                <td class="p-2 px-4 text-sm font-medium text-gray-900">
+                                                    {{ $student['coordinator_rating'] }}</td>
+                                                <td class="p-2 px-4 text-sm font-medium text-gray-900">
+                                                    {{ $student['supervisor_rating'] }}</td>
+                                                <td class="p-2 px-4 text-sm font-medium text-gray-900">
+                                                    {{ $student['total'] }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
 
-        </div>
-        <div class="bg-white h-96 rounded-2xl ">
-            <div class=" h-full p-5">
-                <h1 class="mb-5 font-bold text-main uppercase">Task Accomplishment</h1>
-                <canvas id="barChart"></canvas>
-                <script>
-                    const ctx1 = document.getElementById('barChart').getContext('2d');
-                    const barChart = new Chart(ctx1, {
-                        type: 'bar',
-                        data: {
-                            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'], // X-axis labels
-                            datasets: [{
-                                    label: 'Dataset Blue',
-                                    data: [12, 19, 3, 5, 2, 3, 7], // Y-axis data for blue
-                                    backgroundColor: 'rgba(54, 162, 235, 0.6)', // Blue color
-                                    borderColor: 'rgba(54, 162, 235, 1)', // Blue border
-                                    borderWidth: 1
-                                },
-                                {
-                                    label: 'Dataset Red',
-                                    data: [8, 10, 5, 2, 20, 30, 15], // Y-axis data for red
-                                    backgroundColor: 'rgba(255, 99, 132, 0.6)', // Red color
-                                    borderColor: 'rgba(255, 99, 132, 1)', // Red border
-                                    borderWidth: 1
-                                }
-                            ]
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    display: true,
-                                    position: 'top'
-                                },
-                                tooltip: {
-                                    enabled: true
-                                }
-                            },
-                            scales: {
-                                x: {
-                                    beginAtZero: true
-                                },
-                                y: {
-                                    beginAtZero: true
-                                }
-                            }
-                        }
-                    });
-                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <div class="mt-10">
+        <livewire:coordinator.risk-student />
+    </div>
+    <div class="grid mt-10 grid-cols-2 gap-5">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <div class="bg-white h-96 rounded-2xl">
+            <div class="h-full p-5">
+                <h1 class="mb-5 font-bold text-main uppercase">Task Rating</h1>
+                <canvas id="lineChart" class="h-full"></canvas>
+            </div>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const chartData = @json($taskData);
+                    const ctx = document.getElementById("lineChart").getContext("2d");
+
+                    const labels = chartData.map(data => data.week);
+                    const avgRatings = chartData.map(data => data.avg_rating);
+
+                    new Chart(ctx, {
+                        type: "line",
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: "Average Rating",
+                                data: avgRatings,
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                tension: 0.4 // For a smooth curve
+                            }, ],
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: "top",
+                                },
+                                tooltip: {
+                                    enabled: true,
+                                },
+                            },
+                            scales: {
+                                x: {
+                                    beginAtZero: true
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    suggestedMax: 5
+                                }, // Assuming ratings are out of 5
+                            },
+                        },
+                    });
+                });
+            </script>
+        </div>
+
+
+        <div class="bg-white h-96 rounded-2xl">
+            <div class="h-full p-5">
+                <h1 class="mb-5 font-bold text-main uppercase">Task Accomplishment</h1>
+                <canvas id="barChart"></canvas>
+            </div>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const chartData = @json($chartData);
+                    const ctx = document.getElementById("barChart").getContext("2d");
+
+                    const labels = chartData.map(data => data.week);
+                    const completedData = chartData.map(data => data.completed);
+                    const delayedData = chartData.map(data => data.delayed);
+
+                    new Chart(ctx, {
+                        type: "bar",
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                    label: "Completed",
+                                    data: completedData,
+                                    backgroundColor: "rgba(54, 162, 235, 0.6)",
+                                    borderColor: "rgba(54, 162, 235, 1)",
+                                    borderWidth: 1,
+                                },
+                                {
+                                    label: "Delayed",
+                                    data: delayedData,
+                                    backgroundColor: "rgba(255, 99, 132, 0.6)",
+                                    borderColor: "rgba(255, 99, 132, 1)",
+                                    borderWidth: 1,
+                                },
+                            ],
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: "top",
+                                },
+                                tooltip: {
+                                    enabled: true,
+                                },
+                            },
+                            scales: {
+                                x: {
+                                    beginAtZero: true
+                                },
+                                y: {
+                                    beginAtZero: true
+                                },
+                            },
+                        },
+                    });
+                });
+            </script>
+        </div>
+
+
+    </div>
+
 </div>

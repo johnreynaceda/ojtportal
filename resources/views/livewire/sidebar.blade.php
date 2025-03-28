@@ -342,8 +342,8 @@
                     </a>
                 </li>
                 <li>
-                    <a class="inline-flex items-center w-full px-4 py-2 mt-1  text-white transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main"
-                        href="">
+                    <a class="{{ request()->routeIs('coordinator.user-log') ? 'bg-white text-main scale-95' : 'text-white' }} inline-flex items-center w-full px-4 py-2 mt-1   transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main"
+                        href="{{ route('coordinator.user-log') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" class="lucide lucide-file-archive">
@@ -372,6 +372,20 @@
                             <path d="M10 18h4" />
                         </svg>
                         <span class="ml-4">Partners</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="{{ request()->routeIs('coordinator.intern-evaluation') ? 'bg-white text-main scale-95' : 'text-white' }} inline-flex items-center w-full px-4 py-2 mt-1   transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main"
+                        href="{{ route('coordinator.intern-evaluation') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="lucide lucide-file-user">
+                            <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                            <path d="M15 18a3 3 0 1 0-6 0" />
+                            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z" />
+                            <circle cx="12" cy="13" r="2" />
+                        </svg>
+                        <span class="ml-4">Intern Evaluation</span>
                     </a>
                 </li>
                 <li>
