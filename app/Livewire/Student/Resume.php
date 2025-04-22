@@ -31,122 +31,125 @@ class Resume extends Component implements HasForms
     public $preference = [[]];
     public $work = [[]];
     public $award = [[]];
-    public $certificate  = [[]];
+    public $certificate = [[]];
+
+    public $file = [];
     public $objective;
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
-            Grid::make(4)->schema([
+                Grid::make(4)->schema([
                     FileUpload::make('photo')->required(),
-                Section::make('MY CONTACTS')
-                    ->description('Fill all the required fields.')
-                    ->schema([
-                        TextInput::make('email')->required(),
-                        TextInput::make('phone')->required(),
-                        TextInput::make('address'),  
-                        TextInput::make('social')->url(),  
-                ])->columns(4),
-                Section::make('HARD SKILLS')
-                    ->description('Fill all the required fields.')
-                    ->schema([
-                        Repeater::make('hard_skill')->label('')->addActionLabel('Add Skill')
-                ->schema([
-                    TextInput::make('skill')->required(),
-                
-                    ])
-                
-                            ])->columns(2),
-                Section::make('SOFT SKILLS')
-                    ->description('Fill all the required fields.')
-                    ->schema([
-                        Repeater::make('soft_skill')->label('')->addActionLabel('Add Skill')
-                ->schema([
-                    TextInput::make('skill')->required(),
-                
-                    ])
-                
-                            ])->columns(2),
-                Section::make('EDUCATION BACKGROUND')
-                    ->description('Fill all the required fields.')
-                    ->schema([
-                        Repeater::make('education')->label('')->addActionLabel('Add another')
-                ->schema([
-                    TextInput::make('school_name')->columnSpan(2)->required(),
-                    TextInput::make('degree')->required(),
-                    TextInput::make('year')->numeric()->required(),
-                
-                    ])->columns(4)
-                
-                    ])->columns(1),
-                Section::make('CHARACTER REFERENCES')
-                    ->description('Fill all the required fields.')
-                    ->schema([
-                        Repeater::make('preference')->label('')->addActionLabel('Add another')
-                ->schema([
-                    TextInput::make('name')->columnSpan(2)->required(),
-                    TextInput::make('relation')->required(),
-                    TextInput::make('number')->numeric()->required(),
-                
-                    ])->columns(4)
-                
-                    ])->columns(1),
-                Section::make('CAREER OBJECTIVES')
-                    ->description('Fill all the required fields.')
-                    ->schema([
-                        Textarea::make('objective')->label('')
-                    ])->columns(1),
-                Section::make('WORK EXPERIENCE')
-                    ->description('Fill all the required fields.')
-                    ->schema([
-                        Repeater::make('work')->label('')->addActionLabel('Add Experience')
-                ->schema([
-                    TextInput::make('name')->required(),
-                    TextInput::make('type_of_work')->required(),
-                    
-                    DatePicker::make('date_from')->required(),
-                    DatePicker::make('date_to'),
-                    Checkbox::make('present'),
-                    ])->columns(4),
+                    Section::make('MY CONTACTS')
+                        ->description('Fill all the required fields.')
+                        ->schema([
+                            TextInput::make('email')->required(),
+                            TextInput::make('phone')->required(),
+                            TextInput::make('address'),
+                            TextInput::make('social')->url(),
+                        ])->columns(4),
+                    Section::make('HARD SKILLS')
+                        ->description('Fill all the required fields.')
+                        ->schema([
+                            Repeater::make('hard_skill')->label('')->addActionLabel('Add Skill')
+                                ->schema([
+                                    TextInput::make('skill')->required(),
 
-                    Section::make('AWARDS')
-                    ->description('Fill all the required fields.')
-                    ->schema([
-                        Repeater::make('award')->label('')->addActionLabel('Add Award')
-                ->schema([
-                    TextInput::make('award')->required(),
-                    ])
-                            ])->columns(2),
-                    Section::make('CERTIFICATIONS')
-                    ->description('Fill all the required fields.')
-                    ->schema([
-                        Repeater::make('certificate')->label('')->addActionLabel('Add Certificate')
-                ->schema([
-                    TextInput::make('certificate')->required(),
-                    ])
-                            ])->columns(2),
-                    ])->columns(1),
+                                ])
+
+                        ])->columns(2),
+                    Section::make('SOFT SKILLS')
+                        ->description('Fill all the required fields.')
+                        ->schema([
+                            Repeater::make('soft_skill')->label('')->addActionLabel('Add Skill')
+                                ->schema([
+                                    TextInput::make('skill')->required(),
+
+                                ])
+
+                        ])->columns(2),
+                    Section::make('EDUCATION BACKGROUND')
+                        ->description('Fill all the required fields.')
+                        ->schema([
+                            Repeater::make('education')->label('')->addActionLabel('Add another')
+                                ->schema([
+                                    TextInput::make('school_name')->columnSpan(2)->required(),
+                                    TextInput::make('degree')->required(),
+                                    TextInput::make('year')->numeric()->required(),
+
+                                ])->columns(4)
+
+                        ])->columns(1),
+                    Section::make('CHARACTER REFERENCES')
+                        ->description('Fill all the required fields.')
+                        ->schema([
+                            Repeater::make('preference')->label('')->addActionLabel('Add another')
+                                ->schema([
+                                    TextInput::make('name')->columnSpan(2)->required(),
+                                    TextInput::make('relation')->required(),
+                                    TextInput::make('number')->numeric()->required(),
+
+                                ])->columns(4)
+
+                        ])->columns(1),
+                    Section::make('CAREER OBJECTIVES')
+                        ->description('Fill all the required fields.')
+                        ->schema([
+                            Textarea::make('objective')->label('')
+                        ])->columns(1),
+                    Section::make('WORK EXPERIENCE')
+                        ->description('Fill all the required fields.')
+                        ->schema([
+                            Repeater::make('work')->label('')->addActionLabel('Add Experience')
+                                ->schema([
+                                    TextInput::make('name')->required(),
+                                    TextInput::make('type_of_work')->required(),
+
+                                    DatePicker::make('date_from')->required(),
+                                    DatePicker::make('date_to'),
+                                    Checkbox::make('present'),
+                                ])->columns(4),
+
+                            Section::make('AWARDS')
+                                ->description('Fill all the required fields.')
+                                ->schema([
+                                    Repeater::make('award')->label('')->addActionLabel('Add Award')
+                                        ->schema([
+                                            TextInput::make('award')->required(),
+                                        ])
+                                ])->columns(2),
+                            Section::make('CERTIFICATIONS')
+                                ->description('Fill all the required fields.')
+                                ->schema([
+                                    Repeater::make('certificate')->label('')->addActionLabel('Add Certificate')
+                                        ->schema([
+                                            TextInput::make('certificate')->required(),
+                                        ])
+                                ])->columns(2),
+                        ])->columns(1),
                 ]),
-                
+
             ]);
     }
 
-    public function submitRecord(){
+    public function submitRecord()
+    {
         foreach ($this->photo as $key => $value) {
-           \App\Models\Resume::create([
-            'user_id' => auth()->user()->id,
-            'contact' => json_encode(['email' => $this->email, 'phone' => $this->phone, 'address' => $this->address, 'social' => $this->social]),
-            'hard_skill' => json_encode($this->hard_skill),
-            'soft_skill' => json_encode($this->soft_skill),
-            'education_background' => json_encode($this->education),
-            'character_reference' => json_encode($this->preference),
-            'career_objective' => $this->objective,
-            'work_experience' => json_encode($this->work),
-            'award' => json_encode($this->award),
-            'certification' => json_encode($this->certificate),
-            'photo' => $value->store('Resume', 'public')
-           ]);
+            \App\Models\Resume::create([
+                'user_id' => auth()->user()->id,
+                'contact' => json_encode(['email' => $this->email, 'phone' => $this->phone, 'address' => $this->address, 'social' => $this->social]),
+                'hard_skill' => json_encode($this->hard_skill),
+                'soft_skill' => json_encode($this->soft_skill),
+                'education_background' => json_encode($this->education),
+                'character_reference' => json_encode($this->preference),
+                'career_objective' => $this->objective,
+                'work_experience' => json_encode($this->work),
+                'award' => json_encode($this->award),
+                'certification' => json_encode($this->certificate),
+                'photo' => $value->store('Resume', 'public')
+            ]);
         }
     }
 

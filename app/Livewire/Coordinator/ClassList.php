@@ -31,7 +31,7 @@ class ClassList extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(query: Student::query()->where('course_id', auth()->user()->course_id))
+            ->query(query: Student::query()->where('coordinator_id', auth()->user()->coordinator->id))
             ->columns([
                 TextColumn::make('student_id')->label('STUDENT ID')->searchable()->sortable(),
                 TextColumn::make('firstname')->label('FULLNAME')->formatStateUsing(fn($record) => $record->lastname . ', ' . $record->firstname)->searchable()->sortable(),

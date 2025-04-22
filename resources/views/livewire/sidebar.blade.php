@@ -22,49 +22,37 @@
             </p>
             <ul>
                 <li>
-                    <div x-data="{ open: false }">
-                        <button
-                            class="inline-flex items-center justify-between w-full px-4 py-2 mt-1 text-white transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main group"
-                            @click="open = ! open">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="lucide lucide-file-user">
-                                <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-                                <path d="M15 18a3 3 0 1 0-6 0" />
-                                <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z" />
-                                <circle cx="12" cy="13" r="2" />
-                            </svg>
-                            <span class="ml-4">Requirements</span>
-                            <svg fill="currentColor" viewBox="0 0 20 20"
-                                :class="{ 'rotate-180': open, 'rotate-0': !open }"
-                                class="inline size-5 ml-auto transition-transform duration-200 transform group-hover:text-accent rotate-0">
-                                <path fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                        </button>
-                        <div class="p-2 pl-6 -px-px" x-show="open" @click.outside="open = false"
-                            style="display: none;">
-                            <ul>
-                                <li>
-                                    <a href="{{ route('student.requirement.edited-docs') }}" title="#"
-                                        class="inline-flex items-center w-full p-2 pl-3 text-sm font-light text-white rounded-lg hover:text-main group hover:bg-gray-50">
-                                        <span class="inline-flex items-center w-full">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                class="lucide lucide-dot">
-                                                <circle cx="12.1" cy="12.1" r="1" />
-                                            </svg>
-                                            <span class="ml-4">Documents</span>
-                                        </span>
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </div>
-                    </div>
+                    <a class="{{ request()->routeIs('student.company') ? 'bg-white text-main scale-95' : 'text-white' }} inline-flex items-center w-full px-4 py-2 mt-1   transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main"
+                        href="{{ route('student.company') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="lucide lucide-building2-icon lucide-building-2">
+                            <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" />
+                            <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" />
+                            <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" />
+                            <path d="M10 6h4" />
+                            <path d="M10 10h4" />
+                            <path d="M10 14h4" />
+                            <path d="M10 18h4" />
+                        </svg>
+                        <span class="ml-4"> Company </span>
+                    </a>
                 </li>
+                <li>
+                    <a class="{{ request()->routeIs('student.requirement.edited-docs') ? 'bg-white text-main scale-95' : 'text-white' }} inline-flex items-center w-full px-4 py-2 mt-1   transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main"
+                        href="{{ route('student.requirement.edited-docs') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="lucide lucide-file-user">
+                            <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                            <path d="M15 18a3 3 0 1 0-6 0" />
+                            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z" />
+                            <circle cx="12" cy="13" r="2" />
+                        </svg>
+                        <span class="ml-4"> Requirements </span>
+                    </a>
+                </li>
+
 
                 <li>
                     <a class="{{ request()->routeIs('student.dtr') ? 'bg-white text-main scale-95' : 'text-white' }} inline-flex items-center w-full px-4 py-2 mt-1   transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main"
@@ -298,17 +286,30 @@
                             style="display: none;">
                             <ul>
                                 <li>
-                                    <a href="" title="#"
-                                        class="inline-flex items-center w-full p-2 pl-3 text-sm font-light text-gray-400 rounded-lg hover:text-main group hover:bg-gray-50">
+                                    <a href="{{ route('coordinator.student-rating') }}" title="#"
+                                        class="inline-flex items-center w-full p-2 pl-3 text-sm font-light  text-white rounded-lg hover:text-main group hover:bg-gray-50">
                                         <span class="inline-flex items-center w-full">
-                                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M7.5 11C4.80285 11 2.52952 9.62184 1.09622 7.50001C2.52952 5.37816 4.80285 4 7.5 4C10.1971 4 12.4705 5.37816 13.9038 7.50001C12.4705 9.62183 10.1971 11 7.5 11ZM7.5 3C4.30786 3 1.65639 4.70638 0.0760002 7.23501C-0.0253338 7.39715 -0.0253334 7.60288 0.0760014 7.76501C1.65639 10.2936 4.30786 12 7.5 12C10.6921 12 13.3436 10.2936 14.924 7.76501C15.0253 7.60288 15.0253 7.39715 14.924 7.23501C13.3436 4.70638 10.6921 3 7.5 3ZM7.5 9.5C8.60457 9.5 9.5 8.60457 9.5 7.5C9.5 6.39543 8.60457 5.5 7.5 5.5C6.39543 5.5 5.5 6.39543 5.5 7.5C5.5 8.60457 6.39543 9.5 7.5 9.5Z"
-                                                    fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">
-                                                </path>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                class="lucide lucide-dot">
+                                                <circle cx="12.1" cy="12.1" r="1" />
                                             </svg>
-                                            <span class="ml-4">Income Report </span>
+                                            <span class="ml-4">My Rating</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="" title="#"
+                                        class="inline-flex items-center w-full p-2 pl-3 text-sm font-light text-white rounded-lg hover:text-main group hover:bg-gray-50">
+                                        <span class="inline-flex items-center w-full">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                class="lucide lucide-dot">
+                                                <circle cx="12.1" cy="12.1" r="1" />
+                                            </svg>
+                                            <span class="ml-4">Supervisor Rating</span>
                                         </span>
                                     </a>
                                 </li>
@@ -358,6 +359,20 @@
                     </a>
                 </li>
                 <li>
+                    <a class="{{ request()->routeIs('coordinator.intern-evaluation') ? 'bg-white text-main scale-95' : 'text-white' }} inline-flex items-center w-full px-4 py-2 mt-1   transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main"
+                        href="{{ route('coordinator.intern-evaluation') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="lucide lucide-file-user">
+                            <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                            <path d="M15 18a3 3 0 1 0-6 0" />
+                            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z" />
+                            <circle cx="12" cy="13" r="2" />
+                        </svg>
+                        <span class="ml-4">Intern Evaluation</span>
+                    </a>
+                </li>
+                <li>
                     <a class="inline-flex items-center w-full px-4 py-2 mt-1  text-white transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main"
                         href="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -375,19 +390,22 @@
                     </a>
                 </li>
                 <li>
-                    <a class="{{ request()->routeIs('coordinator.intern-evaluation') ? 'bg-white text-main scale-95' : 'text-white' }} inline-flex items-center w-full px-4 py-2 mt-1   transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main"
-                        href="{{ route('coordinator.intern-evaluation') }}">
+                    <a class="{{ request()->routeIs('coordinator.moa') ? 'bg-white text-main scale-95' : 'text-white' }} inline-flex items-center w-full px-4 py-2 mt-1   transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main"
+                        href="{{ route('coordinator.moa') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="lucide lucide-file-user">
-                            <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-                            <path d="M15 18a3 3 0 1 0-6 0" />
-                            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z" />
-                            <circle cx="12" cy="13" r="2" />
+                            stroke-linejoin="round" class="lucide lucide-handshake-icon lucide-handshake">
+                            <path d="m11 17 2 2a1 1 0 1 0 3-3" />
+                            <path
+                                d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" />
+                            <path d="m21 3 1 11h-2" />
+                            <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" />
+                            <path d="M3 4h8" />
                         </svg>
-                        <span class="ml-4">Intern Evaluation</span>
+                        <span class="ml-4">MOA</span>
                     </a>
                 </li>
+
                 <li>
                     <a class="{{ request()->routeIs('coordinator.chat') ? 'bg-white text-main scale-95' : 'text-white' }} inline-flex items-center w-full px-4 py-2 mt-1   transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main"
                         href="{{ route('coordinator.chat') }}">

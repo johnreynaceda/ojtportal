@@ -10,17 +10,14 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('supervisors', function (Blueprint $table) {
+        Schema::create('coordinators', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
             $table->string('firstname')->nullable();
             $table->string('lastname')->nullable();
             $table->string('middlename')->nullable();
-            $table->string('company_name')->nullable();
+            $table->string('course_handle')->nullable();
             $table->string('contact_number')->nullable();
-            $table->string('company_address')->nullable();
-            $table->string('location_path')->nullable();
-            $table->json('job_requirements')->nullable();
+            $table->foreignId('user_id');
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('supervisors');
+        Schema::dropIfExists('coordinators');
     }
 };

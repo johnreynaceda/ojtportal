@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Announcement;
 use App\Models\CoordinatorRating;
+use App\Models\CoordinatorStudentRate;
 use App\Models\DailyTimeRecord;
 use App\Models\Student;
 use App\Models\SupervisorSurveyResponse;
@@ -32,7 +33,7 @@ class CoordinatorDashboard extends Component
 
     public function getPerformings()
     {
-        $students = Student::where('course_id', auth()->user()->course_id)
+        $students = Student::where('coordinator_id', auth()->user()->coordinator->id)
             ->whereHas('trainee')
             ->with(['trainee.taskAssignedStudents.task', 'trainee.absents', 'studentJournals'])
             ->get()
@@ -59,9 +60,23 @@ class CoordinatorDashboard extends Component
                     ? (($onTimeCount / $journalCount) * 100) * 0.1
                     : 0;
 
-                $evaluation = CoordinatorRating::where('student_id', $student->id)->first();
+                $evaluation = CoordinatorStudentRate::where('student_id', $student->id)->first();
                 // Fixed ratings
-                $coordinator_rating = $evaluation ? $evaluation->total_rating * 0.3 : 27;
+                $total = 0;
+
+                if ($evaluation && $evaluation->responses) {
+                    $responses = json_decode($evaluation->responses, true); // Decode JSON to array
+    
+                    // Sum all earned points
+                    foreach ($responses as $data) {
+                        $earned = isset($data['earned']) ? (int) $data['earned'] : 0;
+                        $total += $earned;
+                    }
+
+                    $coordinator_rating = $total * 0.3;
+                } else {
+                    $coordinator_rating = 27; // Default fallback if no response
+                }
 
                 $response = SupervisorSurveyResponse::where('student_id', $student->id)->first();
                 $total = 0;

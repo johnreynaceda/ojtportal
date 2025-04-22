@@ -27,21 +27,23 @@ class StudentTask extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(Trainee::query()->whereHas('student', function($stud){
+            ->query(Trainee::query()->whereHas('student', function ($stud) {
                 $stud->where('course_id', auth()->user()->course_id);
-            }))
+            }))->headerActions([
+                    Action::make('manage')->label('Manage Training Plan')->color('success')->url(fn() => route('coordinator.training-plan'))
+                ])
             ->columns([
                 TextColumn::make('student.student_id')->label('STUDENT ID')->searchable()->sortable(),
-                TextColumn::make('id')->label('FULLNAME')->formatStateUsing(fn($record) => $record->student->lastname.', '. $record->student->firstname )->searchable()->sortable(),
+                TextColumn::make('id')->label('FULLNAME')->formatStateUsing(fn($record) => $record->student->lastname . ', ' . $record->student->firstname)->searchable()->sortable(),
                 TextColumn::make('student.section')->label('SECTION')->searchable()->sortable(),
                 TextColumn::make('student.major')->label('MAJOR')->searchable()->sortable(),
-                
+
             ])
             ->filters([
                 // ...
             ])
             ->actions([
-             Action::make('view')->label('View Tasks')->button()->color('warning')->icon('heroicon-o-eye')->outlined()->url(fn ($record): string => route('coordinator.view_task', ['id' => $record->id]))
+                Action::make('view')->label('View Tasks')->button()->color('warning')->icon('heroicon-o-eye')->outlined()->url(fn($record): string => route('coordinator.view_task', ['id' => $record->id]))
             ])
             ->bulkActions([
                 // ...

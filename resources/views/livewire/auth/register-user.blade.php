@@ -269,6 +269,20 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="col-span-2">
+                            <label
+                                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Company
+                                Location</label><input type="file" wire:model="file"
+                                class="flex w-full h-10 px-3 py-2 text-sm bg-white border rounded-md peer border-neutral-300 ring-offset-background placeholder:text-neutral-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50" />
+                            <div class="text-sm text-red-500">
+                                @error('file')
+                                    {{ $message }}
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-span-2">
+
+                        </div>
                         <div class="col-span-2"><label
                                 class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Email</label><input
                                 type="email" wire:model="email"
@@ -279,6 +293,7 @@
                                 @enderror
                             </div>
                         </div>
+
                         <div class="col-span-1"><label
                                 class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Password</label><input
                                 type="password" wire:model="password"
@@ -288,6 +303,11 @@
                                     {{ $message }}
                                 @enderror
                             </div>
+                        </div>
+                        <div class="col-span-3"></div>
+                        <div class="col-span-3"></div>
+                        <div class="col-span-3">
+                            {{ $this->form }}
                         </div>
                     </div>
                     <div class="flex items-center p-6 pt-0">

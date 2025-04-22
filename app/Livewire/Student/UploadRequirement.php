@@ -8,11 +8,13 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
@@ -30,7 +32,7 @@ class UploadRequirement extends Component implements HasForms, HasTable
     public $upload = [];
 
     public $requirements_count = 0;
-    
+
     public function table(Table $table): Table
     {
         return $table
@@ -40,7 +42,7 @@ class UploadRequirement extends Component implements HasForms, HasTable
                     fn($record) => strtoupper($record->name)
                 ),
                 ViewColumn::make('id')->label('FILE')->view('filament.tables.file'),
-                TextColumn::make('status')->label('STATUS')->searchable()->badge()->color(fn (string $state): string => match ($state) {
+                TextColumn::make('status')->label('STATUS')->searchable()->badge()->color(fn(string $state): string => match ($state) {
                     'pending' => 'warning',
                     'approved' => 'success',
                     'rejected' => 'danger',
@@ -62,13 +64,14 @@ class UploadRequirement extends Component implements HasForms, HasTable
         return $form
             ->schema([
                 FileUpload::make('upload')->label('')->required(),
-              
+
             ]);
     }
 
-    
 
-    public function submitRequirement(){
+
+    public function submitRequirement()
+    {
         $data = StudentRequirement::where('id', $this->file_id)->first();
         foreach ($this->upload as $key => $value) {
             $data->update([
@@ -78,23 +81,87 @@ class UploadRequirement extends Component implements HasForms, HasTable
     }
 
 
-    public function openUpload($id){
+    public function openUpload($id)
+    {
         $this->file_id = $id;
-        $this->file_name = StudentRequirement::where('id',$id)->first()->name;
+        $this->file_name = StudentRequirement::where('id', $id)->first()->name;
         $this->modalOpen = true;
     }
 
-    public function generateRequirement(){
-        $names = [ 'Resume', 'Enrollment Registration', 'Medical Certificate', 'Evaluation of Grades from Registrar', 'Good Moral', 'Parents Consent', 'Endorsement Letter','Internship Contract', 'Internship Plan', 'OJT Time-frame'
-    ];
+    public function generateRequirement()
+    {
+        $names = [
+            'Resume',
+            'Certification of Registration',
+            'Medical Certificate',
+            'Evaluation of Grades from Registrar',
+            'Good Moral',
+            'Parents Consent',
+            'Student ID',
+            'Insurance',
+            'Orientation Certificate',
+            'Parents Consent',
+            'Endorsement Letter',
+            'Internship Contract',
+            'Internship Plan',
+            'OJT Time-frame'
+        ];
         foreach ($names as $key => $value) {
             StudentRequirement::create([
                 'name' => $value,
-               'student_id' => auth()->user()->student->id
+                'student_id' => auth()->user()->student->id
             ]);
         }
 
 
+    }
+
+    public function dlParentConsent()
+    {
+        $filePath = public_path('requirements/Parents-Consent.docx'); // adjust path as needed
+        if (file_exists($filePath)) {
+            return response()->download($filePath);
+        }
+
+        abort(404, 'File not found.');
+    }
+
+    public function dlInternshipPlan()
+    {
+        $filePath = public_path('requirements/Internship-Training-Plan.docx'); // adjust path as needed
+        if (file_exists($filePath)) {
+            return response()->download($filePath);
+        }
+
+        abort(404, 'File not found.');
+    }
+    public function dlTimeFrame()
+    {
+        $filePath = public_path('requirements/OJT-time-frame.docx'); // adjust path as needed
+        if (file_exists($filePath)) {
+            return response()->download($filePath);
+        }
+
+        abort(404, 'File not found.');
+    }
+    public function dlContract()
+    {
+        $filePath = public_path('requirements/Intership-Contract.docx'); // adjust path as needed
+        if (file_exists($filePath)) {
+            return response()->download($filePath);
+        }
+
+        abort(404, 'File not found.');
+    }
+
+    public function dlEndorsement()
+    {
+        $filePath = public_path('requirements/Endorsement-Letter.docx'); // adjust path as needed
+        if (file_exists($filePath)) {
+            return response()->download($filePath);
+        }
+
+        abort(404, 'File not found.');
     }
 
     public function render()

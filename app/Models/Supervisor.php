@@ -8,11 +8,18 @@ class Supervisor extends Model
 {
     protected $guarded = [];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function trainees(){
+    public function trainees()
+    {
         return $this->hasMany(Trainee::class);
+    }
+
+    public function supervisorMoa()
+    {
+        return $this->hasOne(SupervisorMoa::class);
     }
 }

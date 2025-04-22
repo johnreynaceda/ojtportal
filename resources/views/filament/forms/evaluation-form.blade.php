@@ -1,18 +1,9 @@
-<div>
-    <div class="mb-3">
-        @if (auth()->user()->user_type == 'supervisor')
-            <x-button label="Back" class="font-semibold" icon="arrow-left" slate
-                href="{{ route('supervisor.ratings') }}" />
-        @else
-            <x-button label="Back" class="font-semibold" icon="arrow-left" slate
-                href="{{ route('coordinator.student-rating') }}" />
-        @endif
-    </div>
+<div class="p-5">
     <div class="flex flex-col">
         <div class=" overflow-x-auto">
             <div class="min-w-full inline-block align-middle">
                 <div class="overflow-hidden border rounded-lg border-gray-300">
-                    @if (!$has_rating)
+                    @if (!$this->has_rating)
                         <table class=" min-w-full  rounded-xl">
                             <thead>
                                 <tr class="bg-gray-50">
@@ -30,7 +21,7 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-300 ">
-                                @forelse ($criterias as $criteria)
+                                @forelse ($this->criterias as $criteria)
                                     <tr class="bg-gray-50 border-t">
                                         <td scope="col"
                                             class="p-2 text-left text-main uppercase leading-6 font-semibold ">
@@ -64,11 +55,11 @@
                                             <td
                                                 class="w-40 p-2 whitespace-nowrap text-sm leading-6 font-medium text-center text-gray-900">
                                                 <input type="number"
-                                                    wire:model.debounce.500ms="points.{{ $item->id }}.earned"
+                                                    wire:model.live="points.{{ $item->id }}.earned"
                                                     class="w-10 border rounded text-center p-1" min="0"
                                                     max="{{ $item->max_point }}" />
 
-                                                <input type="hidden" wire:model="points.{{ $item->id }}.id"
+                                                <input type="hidden" wire:model.live="points.{{ $item->id }}.id"
                                                     value="{{ $item->id }}">
 
                                                 @error("points.{{ $item->id }}.earned")
@@ -102,7 +93,7 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-300 ">
-                                @forelse ($criterias as $criteria)
+                                @forelse ($this->criterias as $criteria)
                                     <tr class="bg-gray-50 border-t">
                                         <td scope="col"
                                             class="p-2 text-left text-main uppercase leading-6 font-semibold ">
@@ -151,7 +142,7 @@
                     @endif
 
                 </div>
-                @if (!$has_rating)
+                @if (!$this->has_rating)
                     <div class="mt-5">
                         <x-button label="Submit Rating" wire:click="submitRating" />
                     </div>
@@ -159,4 +150,5 @@
             </div>
         </div>
     </div>
+
 </div>

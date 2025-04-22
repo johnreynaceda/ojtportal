@@ -49,23 +49,33 @@ class User extends Authenticatable
         ];
     }
 
-    public function student(){
+    public function student()
+    {
         return $this->hasOne(Student::class);
     }
 
-    public function supervisor(){
+    public function supervisor()
+    {
         return $this->hasOne(Supervisor::class);
     }
 
-    public function chats(){
+    public function chats()
+    {
         return $this->hasMany(Chat::class);
     }
 
-    public function chatUsers(){
+    public function coordinator()
+    {
+        return $this->hasOne(Coordinator::class);
+    }
+
+    public function chatUsers()
+    {
         return $this->hasMany(ChatUser::class);
     }
-    
-    public function resume(){
+
+    public function resume()
+    {
         return $this->hasOne(Resume::class);
     }
 }

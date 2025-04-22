@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Supervisor;
 
+use App\Models\CoordinatorStudentRate;
 use App\Models\Criteria;
 use App\Models\CriteriaQuestion;
 use App\Models\SupervisorSurveyResponse;
@@ -39,7 +40,11 @@ class PerformanceRating extends Component implements HasForms
             ]
         ])->toArray();
 
-        $survey = SupervisorSurveyResponse::where('student_id', $this->student_id)->first();
+        if (auth()->user()->user_type == 'supervisor') {
+            $survey = SupervisorSurveyResponse::where('student_id', $this->student_id)->first();
+        } else {
+            $survey = CoordinatorStudentRate::where('student_id', $this->student_id)->first();
+        }
         if ($survey) {
             $this->responses = json_decode($survey->responses, true);
 
@@ -92,10 +97,17 @@ class PerformanceRating extends Component implements HasForms
             $total += $earned;
         }
 
-        SupervisorSurveyResponse::create([
-            'student_id' => $this->student_id,
-            'responses' => json_encode($this->points),
-        ]);
+        if (auth()->user()->user_type == 'supervisor') {
+            SupervisorSurveyResponse::create([
+                'student_id' => $this->student_id,
+                'responses' => json_encode($this->points),
+            ]);
+        } else {
+            CoordinatorStudentRate::create([
+                'student_id' => $this->student_id,
+                'responses' => json_encode($this->points),
+            ]);
+        }
 
     }
 

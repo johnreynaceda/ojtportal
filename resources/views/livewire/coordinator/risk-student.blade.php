@@ -1,6 +1,6 @@
 <div>
     <div class="bg-white p-5 rounded-xl">
-        <h1 class="mb-5 font-bold text-main uppercase">Top Performing Students</h1>
+        <h1 class="mb-5 font-bold text-main uppercase">At Risks Students</h1>
         <div class="max-h-96 overflow-y-auto">
             <div class="flex flex-col">
                 <div class=" overflow-x-auto">

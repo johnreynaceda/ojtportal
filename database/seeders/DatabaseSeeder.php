@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Coordinator;
 use App\Models\Course;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -18,7 +19,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Bachelor of Science in Information System',
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => 'BSIS',
             'email' => 'coordinator1@gmail.com',
             'password' => bcrypt('password'),
@@ -27,10 +28,14 @@ class DatabaseSeeder extends Seeder
             'is_approved' => true,
         ]);
 
+        Coordinator::create([
+            'user_id' => $user->id
+        ]);
+
         $course = Course::create([
             'name' => 'Bachelor of Science in Information Technology',
         ]);
-        User::create([
+        $user = User::create([
             'name' => 'BSIT',
             'email' => 'coordinator2@gmail.com',
             'password' => bcrypt('password'),
@@ -38,13 +43,16 @@ class DatabaseSeeder extends Seeder
             'course_id' => $course->id,
             'is_approved' => true,
         ]);
+        Coordinator::create([
+            'user_id' => $user->id
+        ]);
 
 
         $course = Course::create([
             'name' => 'Bachelor of Science in Computer Science',
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => 'BSCS',
             'email' => 'coordinator3@gmail.com',
             'password' => bcrypt('password'),
@@ -52,7 +60,10 @@ class DatabaseSeeder extends Seeder
             'course_id' => $course->id,
             'is_approved' => true,
         ]);
+        Coordinator::create([
+            'user_id' => $user->id
+        ]);
 
-        
+
     }
 }

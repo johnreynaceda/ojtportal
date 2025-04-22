@@ -8,8 +8,10 @@ use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
@@ -30,23 +32,39 @@ class MyJournal extends Component implements HasForms, HasTable
     {
         return $table
             ->query(StudentJournal::query()->where('student_id', auth()->user()->student->id))->headerActions([
+                    Action::make('absent')->label('Manage Absent')->color('success'),
                     CreateAction::make('new')->label('New Journal')->icon('heroicon-o-plus')->form([
+                        // Grid::make(2)->schema([
+                        //     Textarea::make('objective')->required(),
+                        //     Textarea::make('accomplishment')->required(),
+                        //     Textarea::make('reflection')->required(),
+                        //     Textarea::make('knowledge')->required(),
+                        //     DatePicker::make('date')->required()
+                        // ])
                         Grid::make(2)->schema([
-                            Textarea::make('objective')->required(),
-                            Textarea::make('accomplishment')->required(),
-                            Textarea::make('reflection')->required(),
-                            Textarea::make('knowledge')->required(),
                             DatePicker::make('date')->required()
+                        ]),
+                        Grid::make(2)->schema([
+                            TimePicker::make('am_timein')->label('AM Time In')->required()->withoutSeconds(),
+                            TimePicker::make('am_timeout')->label('AM Time Out')->required()->withoutSeconds(),
+                            TimePicker::make('pm_timein')->label('PM Time In')->required()->withoutSeconds(),
+                            TimePicker::make('pm_timeout')->label('PM Time Out')->required()->withoutSeconds(),
+                            Textarea::make('activities')->required(),
+                            Textarea::make('problem_encountered')->label('Problem/Encountered')->required(),
+                            Textarea::make('reflection')->label('Reflection')->required(),
                         ])
                     ])->action(
                             function ($data) {
                                 StudentJournal::create([
                                     'student_id' => auth()->user()->student->id,
                                     'date' => Carbon::parse($data['date']),
-                                    'objective' => $data['objective'],
-                                    'accomplishment' => $data['accomplishment'],
+                                    'am_timein' => $data['am_timein'],
+                                    'am_timeout' => $data['am_timeout'],
+                                    'pm_timein' => $data['pm_timein'],
+                                    'pm_timeout' => $data['pm_timeout'],
+                                    'activities' => $data['activities'],
+                                    'problem_encountered' => $data['problem_encountered'],
                                     'reflection' => $data['reflection'],
-                                    'knowledge' => $data['knowledge'],
                                     'status' => Carbon::parse($data['date'])->isSameDay(now()) ? 'On-time' : 'Delayed'
                                 ]);
 
@@ -61,10 +79,15 @@ class MyJournal extends Component implements HasForms, HasTable
                 ])
             ->columns([
                 TextColumn::make('date')->label('DATE')->date()->searchable(),
-                TextColumn::make('objective')->label('OBJECTIVE')->words(5)->searchable(),
-                TextColumn::make('accomplishment')->label('ACCOMPLISHMENT')->words(5)->searchable(),
+                TextColumn::make('activities')->label('ACTIVITIES')->words(5)->searchable(),
+                TextColumn::make('problem_encountered')->label('PROBLEM/ENCOUNTERED')->words(5)->searchable(),
                 TextColumn::make('reflection')->label('REFLECTION')->words(5)->searchable(),
-                TextColumn::make('knowledge')->label('KNOWLEDGE')->words(5)->searchable(),
+                TextColumn::make('am_timein')->label('AM')->words(5)->searchable()->formatStateUsing(
+                    fn($record) => Carbon::parse($record->am_timein)->format('h:i A') . ' - ' . Carbon::parse($record->am_timeout)->format('h:i A')
+                ),
+                TextColumn::make('pm_timein')->label('PM')->words(5)->searchable()->formatStateUsing(
+                    fn($record) => Carbon::parse($record->pm_timein)->format('h:i A') . ' - ' . Carbon::parse($record->pm_timeout)->format('h:i A')
+                ),
                 TextColumn::make('status')->label('STATUS')->words(5)->searchable()->badge()->color(fn(string $state): string => match ($state) {
                     'On-time' => 'success',
                     'Delayed' => 'danger',

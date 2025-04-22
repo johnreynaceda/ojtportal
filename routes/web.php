@@ -92,10 +92,22 @@ Route::prefix('coordinator')->middleware(['auth', 'verified'])->group(function (
     Route::get('/view-task/{id}', function () {
         return view('coordinator.view-task');
     })->name('coordinator.view_task');
+    Route::get('/coordinator-student-rating/', function () {
+        return view('coordinator.student-rating');
+    })->name('coordinator.student-rating');
+    Route::get('/coordinator-survey-response/{id}', function () {
+        return view('coordinator.survey-response');
+    })->name('coordinator.survey-response');
 
     Route::get('/user-log', function () {
         return view('coordinator.user-log');
     })->name('coordinator.user-log');
+    Route::get('/training-plan', function () {
+        return view('coordinator.training-plan');
+    })->name('coordinator.training-plan');
+    Route::get('/moa', function () {
+        return view('coordinator.moa');
+    })->name('coordinator.moa');
     Route::get('/intern-evaluation', function () {
         return view('coordinator.intern-evaluation');
     })->name('coordinator.intern-evaluation');
@@ -132,6 +144,9 @@ Route::prefix('student')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/resume', function () {
         return view('student.resume');
     })->name('student.resume');
+    Route::get('/company', function () {
+        return view('student.company');
+    })->name('student.company');
 
 
 });
