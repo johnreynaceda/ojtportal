@@ -133,7 +133,7 @@ class SupervisorDashboard extends Component
                     $query->where('id', auth()->user()->supervisor->id);
                 });
             })->count(),
-            'completed' => Trainee::where('supervisor_id', auth()->user()->supervisor->id)->where('status', 'Ccompleted')->count(),
+            'completed' => Trainee::where('supervisor_id', auth()->user()->supervisor->id)->where('status', 'Completed')->count(),
         ]);
     }
 }

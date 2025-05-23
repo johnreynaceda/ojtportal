@@ -23,15 +23,16 @@
                                 if (auth()->user()->student->trainee) {
                                     $approved_dtr = auth()
                                         ->user()
-                                        ->student->trainee->dailyTimeRecords->where('status', 'Approved')
-                                        ->sum('total_hours');
+                                        ->student->studentJournals->where('journal_status', 'approved')
+                                        ->where('status', '!=', 'Delayed')
+                                        ->sum('no_of_hours');
                                     $remaining_hours = 400 - $approved_dtr;
                                 } else {
                                     $remaining_hours = 0;
                                 }
 
                             @endphp
-                            {{ $remaining_hours }}
+                            {{ round($remaining_hours) }}
                         </h1>
                     </div>
                 </div>
@@ -54,7 +55,7 @@
                             @php
                                 $tasks = 0;
                                 if (auth()->user()->student->trainee) {
-                                    $tasks = \App\Models\Task::where('status', 'Pending')
+                                    $tasks = \App\Models\Task::where('status', 'In Progress')
                                         ->whereHas('taskAssignedStudents', function ($record) {
                                             $record->where('trainee_id', auth()->user()->student->trainee->id);
                                         })
@@ -102,85 +103,104 @@
     </div>
     <div class="grid mt-10 grid-cols-2 gap-5">
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <div class="bg-white h-96 rounded-2xl ">
-            <div class=" h-full p-5">
+        <div class="bg-white h-96 rounded-2xl">
+            <div class="h-full p-5">
                 <h1 class="mb-5 font-bold text-main uppercase">Task Rating</h1>
                 <canvas id="lineChart" class="h-full"></canvas>
-                <script>
-                    const ctx = document.getElementById('lineChart').getContext('2d');
-                    const lineChart = new Chart(ctx, {
-                        type: 'line',
+            </div>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const chartData = @json($taskData);
+                    const ctx = document.getElementById("lineChart").getContext("2d");
+
+                    const labels = chartData.map(data => data.week);
+                    const avgRatings = chartData.map(data => data.avg_rating);
+
+                    new Chart(ctx, {
+                        type: "line",
                         data: {
-                            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'], // X-axis labels
+                            labels: labels,
                             datasets: [{
-                                label: 'Sales Data',
-                                data: [65, 59, 80, 81, 56, 55, 40], // Y-axis data
+                                label: "Average Rating",
+                                data: avgRatings,
                                 borderColor: 'rgba(75, 192, 192, 1)',
                                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                                 tension: 0.4 // For a smooth curve
-                            }]
+                            }, ],
                         },
                         options: {
                             responsive: true,
                             plugins: {
                                 legend: {
                                     display: true,
-                                    position: 'top'
+                                    position: "top",
                                 },
                                 tooltip: {
-                                    enabled: true
-                                }
+                                    enabled: true,
+                                },
                             },
                             scales: {
                                 x: {
                                     beginAtZero: true
                                 },
                                 y: {
-                                    beginAtZero: true
-                                }
-                            }
-                        }
+                                    beginAtZero: true,
+                                    suggestedMax: 5
+                                }, // Assuming ratings are out of 5
+                            },
+                        },
                     });
-                </script>
+                });
+            </script>
+        </div>
+
+
+        <div class="bg-white h-96 rounded-2xl">
+            <div class="h-full p-5">
+                <h1 class="mb-5 font-bold text-main uppercase">Task Accomplishment</h1>
+                <canvas id="barChart"></canvas>
             </div>
 
-        </div>
-        <div class="bg-white h-96 rounded-2xl ">
-            <div class=" h-full p-5">
-                <h1 class="mb-5 font-bold text-main uppercase">Task Rating per criteria</h1>
-                <canvas id="barChart"></canvas>
-                <script>
-                    const ctx1 = document.getElementById('barChart').getContext('2d');
-                    const barChart = new Chart(ctx1, {
-                        type: 'bar',
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const chartData = @json($chartData);
+                    const ctx = document.getElementById("barChart").getContext("2d");
+
+                    const labels = chartData.map(data => data.week);
+                    const completedData = chartData.map(data => data.completed);
+                    const delayedData = chartData.map(data => data.delayed);
+
+                    new Chart(ctx, {
+                        type: "bar",
                         data: {
-                            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'], // X-axis labels
+                            labels: labels,
                             datasets: [{
-                                    label: 'Dataset Blue',
-                                    data: [12, 19, 3, 5, 2, 3, 7], // Y-axis data for blue
-                                    backgroundColor: 'rgba(54, 162, 235, 0.6)', // Blue color
-                                    borderColor: 'rgba(54, 162, 235, 1)', // Blue border
-                                    borderWidth: 1
+                                    label: "Completed",
+                                    data: completedData,
+                                    backgroundColor: "rgba(54, 162, 235, 0.6)",
+                                    borderColor: "rgba(54, 162, 235, 1)",
+                                    borderWidth: 1,
                                 },
                                 {
-                                    label: 'Dataset Red',
-                                    data: [8, 10, 5, 2, 20, 30, 15], // Y-axis data for red
-                                    backgroundColor: 'rgba(255, 99, 132, 0.6)', // Red color
-                                    borderColor: 'rgba(255, 99, 132, 1)', // Red border
-                                    borderWidth: 1
-                                }
-                            ]
+                                    label: "Delayed",
+                                    data: delayedData,
+                                    backgroundColor: "rgba(255, 99, 132, 0.6)",
+                                    borderColor: "rgba(255, 99, 132, 1)",
+                                    borderWidth: 1,
+                                },
+                            ],
                         },
                         options: {
                             responsive: true,
                             plugins: {
                                 legend: {
                                     display: true,
-                                    position: 'top'
+                                    position: "top",
                                 },
                                 tooltip: {
-                                    enabled: true
-                                }
+                                    enabled: true,
+                                },
                             },
                             scales: {
                                 x: {
@@ -188,12 +208,14 @@
                                 },
                                 y: {
                                     beginAtZero: true
-                                }
-                            }
-                        }
+                                },
+                            },
+                        },
                     });
-                </script>
-            </div>
+                });
+            </script>
         </div>
+
+
     </div>
 </div>

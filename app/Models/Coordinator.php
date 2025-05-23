@@ -12,4 +12,9 @@ class Coordinator extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function supervisorMoas()
+    {
+        return $this->hasMany(SupervisorMoa::class);
+    }
 }

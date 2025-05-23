@@ -76,7 +76,7 @@
     </div>
     <div class="mt-10">
         <div class="bg-white p-5 rounded-xl">
-            <h1 class="mb-5 font-bold text-main uppercase">Top Performing Students</h1>
+            <h1 class="mb-5 font-bold text-main uppercase">Student Performance Ranking</h1>
             <div class="max-h-96 overflow-y-auto">
                 <div class="flex flex-col">
                     <div class=" overflow-x-auto">
@@ -109,6 +109,9 @@
                                             <th
                                                 class="p-2 w-20 text-left text-sm font-semibold text-gray-900 px-4 uppercase">
                                                 Total</th>
+                                            <th
+                                                class="p-2 w-20 text-left text-sm font-semibold text-gray-900 px-4 uppercase">
+                                                Risk Level</th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-300">
@@ -130,6 +133,19 @@
                                                     {{ $student['supervisor_rating'] }}</td>
                                                 <td class="p-2 px-4 text-sm font-medium text-gray-900">
                                                     {{ $student['total'] }}</td>
+                                                <td class="p-2 px-4 text-sm font-medium text-gray-900">
+                                                    @switch($student['category'])
+                                                        @case('medium')
+                                                            <x-badge label="Medium" warning />
+                                                        @break
+
+                                                        @case('high')
+                                                            <x-badge label="High" negative />
+                                                        @break
+
+                                                        @default
+                                                    @endswitch
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -143,7 +159,7 @@
         </div>
     </div>
     <div class="mt-10">
-        <livewire:coordinator.risk-student />
+        {{-- <livewire:coordinator.risk-student /> --}}
     </div>
     <div class="grid mt-10 grid-cols-2 gap-5">
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

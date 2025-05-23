@@ -8,6 +8,10 @@
             <span class="text-green-600 italic">Deployed...</span>
         @break
 
+        @case('dropped')
+            <span class="text-red-600 italic">Dropped</span>
+        @break
+
         @default
     @endswitch
 </div>

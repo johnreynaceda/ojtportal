@@ -6,6 +6,7 @@ use App\Models\CoordinatorRating;
 use App\Models\CoordinatorStudentRate;
 use App\Models\DailyTimeRecord;
 use App\Models\Student;
+use App\Models\StudentJournal;
 use App\Models\SupervisorSurveyResponse;
 use Livewire\Component;
 
@@ -36,8 +37,9 @@ class RiskStudent extends Component
                 $task_rating = $taskPercentage * 0.2;
 
                 // Attendance rate calculation
-                $absentHours = $student->trainee->absents->sum('total_hour');
-                $presentHours = DailyTimeRecord::where('trainee_id', $student->trainee->id)->sum('total_hours');
+                $absentHours = $student->trainee->absents->sum('no_of_hours');
+
+                $presentHours = StudentJournal::where('student_id', $student->trainee->id)->sum('no_of_hours');
                 $attendance_rate = $presentHours > 0
                     ? ((($presentHours - $absentHours) / $presentHours) * 100) * 0.1
                     : 0;

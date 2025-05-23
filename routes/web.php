@@ -98,6 +98,9 @@ Route::prefix('coordinator')->middleware(['auth', 'verified'])->group(function (
     Route::get('/coordinator-survey-response/{id}', function () {
         return view('coordinator.survey-response');
     })->name('coordinator.survey-response');
+    Route::get('/partner', function () {
+        return view('coordinator.partner');
+    })->name('coordinator.partner');
 
     Route::get('/user-log', function () {
         return view('coordinator.user-log');
@@ -114,6 +117,13 @@ Route::prefix('coordinator')->middleware(['auth', 'verified'])->group(function (
     Route::get('/intern-evaluation/{id}', function () {
         return view('coordinator.student-evaluation');
     })->name('coordinator.student-evaluation');
+
+    Route::get('/supervisor-rating', function () {
+        return view('coordinator.supervisor-rating');
+    })->name('coordinator.supervisor-rating');
+    Route::get('/supervisor-rating/{id}', function () {
+        return view('coordinator.supervisor-rating-record');
+    })->name('coordinator.supervisor-rating-record');
 });
 
 Route::prefix('student')->middleware(['auth', 'verified'])->group(function () {
@@ -147,6 +157,12 @@ Route::prefix('student')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/company', function () {
         return view('student.company');
     })->name('student.company');
+    Route::get('/evaluate', function () {
+        return view('student.evaluate');
+    })->name('student.evaluate');
+    Route::get('/recommendation', function () {
+        return view('student.recommendation');
+    })->name('student.recommendation');
 
 
 });
@@ -158,6 +174,9 @@ Route::prefix('supervisor')->middleware(['auth', 'verified'])->group(function ()
     Route::get('/trainee', function () {
         return view('supervisor.trainee');
     })->name('supervisor.trainee');
+    Route::get('/application', function () {
+        return view('supervisor.application');
+    })->name('supervisor.application');
     Route::get('/tasks', function () {
         return view('supervisor.tasks');
     })->name('supervisor.tasks');
@@ -179,6 +198,15 @@ Route::prefix('supervisor')->middleware(['auth', 'verified'])->group(function ()
     Route::get('/manage-absents', function () {
         return view('supervisor.absents');
     })->name('supervisor.absents');
+    Route::get('/moa', function () {
+        return view('supervisor.moa');
+    })->name('supervisor.moa');
+    Route::get('/journal', function () {
+        return view('supervisor.journal');
+    })->name('supervisor.journal');
+    Route::get('/journal/{id}', function () {
+        return view('supervisor.student-journal');
+    })->name('supervisor.student-journal');
 
 });
 

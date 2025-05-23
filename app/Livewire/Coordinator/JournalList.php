@@ -9,6 +9,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
+use Filament\Support\Enums\IconPosition;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
@@ -26,18 +27,25 @@ class JournalList extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(Student::query()->where('course_id', auth()->user()->course_id))
+            ->query(auth()->user()->user_type == 'supervisor' ? Trainee::query()->where('supervisor_id', auth()->user()->supervisor->id) : Trainee::query()->whereHas('student', function ($record) {
+                $record->where('coordinator_id', auth()->user()->coordinator->id);
+            }))->headerActions([
+                    Action::make('manage_absent')->label('Manage Absents')->icon('heroicon-o-adjustments-horizontal')->iconPosition(IconPosition::After)->url(fn() => route('supervisor.absents'))
+                ])
             ->columns([
-                TextColumn::make('student_id')->label('STUDENT ID')->searchable()->sortable(),
-                TextColumn::make('firstname')->label('FULLNAME')->formatStateUsing(fn($record) => $record->lastname.', '. $record->firstname )->searchable()->sortable(),
-                TextColumn::make('major')->label('MAJOR')->searchable()->sortable(),
-                TextColumn::make('section')->label('SECTION')->searchable()->sortable(),
+                TextColumn::make('student.student_id')->label('STUDENT ID')->searchable()->sortable(),
+                TextColumn::make('id')->label('FULLNAME')->formatStateUsing(fn($record) => $record->student->lastname . ', ' . $record->student->firstname)->searchable()->sortable(),
+                TextColumn::make('student.section')->label('SECTION')->searchable()->sortable(),
+                ViewColumn::make('spent')->label('SPENT')->view('filament.tables.spent'),
+                ViewColumn::make('remaining')->label('REMAINING')->view('filament.tables.remaining'),
+
+
             ])
             ->filters([
                 // ...
             ])
             ->actions([
-                Action::make('view')->icon('heroicon-o-eye')->button()->color('warning')->outlined()->url(fn ($record): string => route('coordinator.journal_view', ['id' => $record->id]))
+                Action::make('view')->label('VIEW JOURNAL')->icon('heroicon-o-eye')->button()->color('warning')->outlined()->url(fn($record): string => route('supervisor.student-journal', ['id' => $record->student_id]))
             ])
             ->bulkActions([
                 // ...

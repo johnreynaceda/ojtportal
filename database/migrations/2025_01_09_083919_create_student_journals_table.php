@@ -21,7 +21,9 @@ return new class extends Migration {
             $table->string('activities');
             $table->longText('problem_encountered')->nullable();
             $table->longText('reflection')->nullable();
+            $table->double('no_of_hours');
             $table->string('status');
+            $table->string('journal_status')->nullable();
             $table->timestamps();
         });
     }

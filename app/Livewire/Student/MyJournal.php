@@ -32,7 +32,7 @@ class MyJournal extends Component implements HasForms, HasTable
     {
         return $table
             ->query(StudentJournal::query()->where('student_id', auth()->user()->student->id))->headerActions([
-                    Action::make('absent')->label('Manage Absent')->color('success'),
+                    Action::make('absent')->label('Manage Absent')->color('success')->url(route('student.absent')),
                     CreateAction::make('new')->label('New Journal')->icon('heroicon-o-plus')->form([
                         // Grid::make(2)->schema([
                         //     Textarea::make('objective')->required(),
@@ -55,6 +55,21 @@ class MyJournal extends Component implements HasForms, HasTable
                         ])
                     ])->action(
                             function ($data) {
+
+                                $amTimeIn = Carbon::parse($data['am_timein']);
+                                $amTimeOut = Carbon::parse($data['am_timeout']);
+
+                                $pmTimeIn = Carbon::parse($data['pm_timein']);
+                                $pmTimeOut = Carbon::parse($data['pm_timeout']);
+
+                                $totalHours = $amTimeIn->diffInMinutes($amTimeOut) / 60 + $pmTimeIn->diffInMinutes($pmTimeOut) / 60;
+
+
+                                $hours = $totalHours;
+
+
+
+
                                 StudentJournal::create([
                                     'student_id' => auth()->user()->student->id,
                                     'date' => Carbon::parse($data['date']),
@@ -65,7 +80,9 @@ class MyJournal extends Component implements HasForms, HasTable
                                     'activities' => $data['activities'],
                                     'problem_encountered' => $data['problem_encountered'],
                                     'reflection' => $data['reflection'],
-                                    'status' => Carbon::parse($data['date'])->isSameDay(now()) ? 'On-time' : 'Delayed'
+                                    'no_of_hours' => $hours,
+                                    'status' => Carbon::parse($data['date'])->isSameDay(now()) ? 'On-time' : 'Delayed',
+                                    'journal_status' => 'pending'
                                 ]);
 
                                 UserLog::create([
@@ -93,6 +110,14 @@ class MyJournal extends Component implements HasForms, HasTable
                     'Delayed' => 'danger',
 
                 }),
+                TextColumn::make('journal_status')->label("")->words(5)->searchable()->badge()->color(fn(string $state): string => match ($state) {
+                    'approved' => 'success',
+                    'rejected' => 'danger',
+                    'pending' => 'warning',
+
+                })->formatStateUsing(
+                        fn($record) => ucfirst($record->journal_status)
+                    ),
             ])
             ->filters([
                 // ...

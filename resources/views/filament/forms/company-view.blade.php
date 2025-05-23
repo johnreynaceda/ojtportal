@@ -3,7 +3,6 @@
         <h1 class="text-2xl font-bold text-gray-700">
             {{ $getRecord()->company_name }}
         </h1>
-        <x-button label="Cancel Appointment" class="font-semibold" negative />
     </div>
     <div class="grid grid-cols-2 gap-10">
         <div class="border h-64">

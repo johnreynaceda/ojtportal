@@ -28,19 +28,19 @@ class AttendanceList extends Component implements HasForms, HasTable
     {
         return $table
             ->query(Trainee::query()->where('supervisor_id', auth()->user()->supervisor->id))->headerActions([
-                Action::make('manage_absent')->label('Manage Absents')->icon('heroicon-o-adjustments-horizontal')->iconPosition(IconPosition::After)->url(fn() => route('supervisor.absents'))
-            ])
+                    Action::make('manage_absent')->label('Manage Absents')->icon('heroicon-o-adjustments-horizontal')->iconPosition(IconPosition::After)->url(fn() => route('supervisor.absents'))
+                ])
             ->columns([
                 TextColumn::make('student.student_id')->label('STUDENT ID')->searchable()->sortable(),
-                TextColumn::make('id')->label('FULLNAME')->formatStateUsing(fn($record) => $record->student->lastname.', '. $record->student->firstname )->searchable()->sortable(),
+                TextColumn::make('id')->label('FULLNAME')->formatStateUsing(fn($record) => $record->student->lastname . ', ' . $record->student->firstname)->searchable()->sortable(),
                 TextColumn::make('student.section')->label('SECTION')->searchable()->sortable(),
                 TextColumn::make('student.id')->label('SPENT')->searchable()->sortable()->formatStateUsing(
-                    function($record){
+                    function ($record) {
                         return $record->dailyTimeRecords->where('status', 'Approved')->sum('total_hours');
                     }
                 ),
                 TextColumn::make('student_id')->label('REMAINING')->searchable()->sortable()->formatStateUsing(
-                    function($record){
+                    function ($record) {
                         $approved_dtr = $record->dailyTimeRecords->where('status', 'Approved')->sum('total_hours');
                         return 400 - $approved_dtr;
                     }
@@ -50,7 +50,7 @@ class AttendanceList extends Component implements HasForms, HasTable
                 // ...
             ])
             ->actions([
-             Action::make('view')->label('View DTR')->button()->color('warning')->icon('heroicon-o-eye')->outlined()->url(fn ($record): string => route('supervisor.view_attendance', ['id' => $record->id]))
+                Action::make('view')->label('View DTR')->button()->color('warning')->icon('heroicon-o-eye')->outlined()->url(fn($record): string => route('supervisor.view_attendance', ['id' => $record->id]))
             ])
             ->bulkActions([
                 // ...

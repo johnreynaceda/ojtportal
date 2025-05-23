@@ -54,7 +54,7 @@
                 </li>
 
 
-                <li>
+                {{-- <li>
                     <a class="{{ request()->routeIs('student.dtr') ? 'bg-white text-main scale-95' : 'text-white' }} inline-flex items-center w-full px-4 py-2 mt-1   transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main"
                         href="{{ route('student.dtr') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -64,14 +64,14 @@
                             <path d="M16 2v4" />
                             <path d="M3 10h18" />
                             <path d="M8 2v4" />
-                            <path d="M17 14h-6" />
+                            <path d="M17 14h-6" />e
                             <path d="M13 18H7" />
                             <path d="M7 14h.01" />
                             <path d="M17 18h.01" />
                         </svg>
                         <span class="ml-4"> DTR </span>
                     </a>
-                </li>
+                </li> --}}
                 <li>
                     <a class="{{ request()->routeIs('student.tasks') ? 'bg-white text-main scale-95' : 'text-white' }} inline-flex items-center w-full px-4 py-2 mt-1   transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main"
                         href="{{ route('student.tasks') }}">
@@ -103,6 +103,19 @@
                                 d="M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
                         </svg>
                         <span class="ml-4">Journal</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="{{ request()->routeIs('student.evaluate') ? 'bg-white text-main scale-95' : 'text-white' }} inline-flex items-center w-full px-4 py-2 mt-1   transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main"
+                        href="{{ route('student.evaluate') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="lucide lucide-thumbs-up-icon lucide-thumbs-up">
+                            <path d="M7 10v12" />
+                            <path
+                                d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z" />
+                        </svg>
+                        <span class="ml-4">Evaluation</span>
                     </a>
                 </li>
                 <li>
@@ -201,7 +214,7 @@
                                         </span>
                                     </a>
                                 </li>
-                                <li>
+                                {{-- <li>
                                     <a href="{{ route('coordinator.students-dtr') }}" title=""
                                         class="inline-flex items-center w-full p-2 pl-3 text-sm font-light text-white rounded-lg hover:text-main group hover:bg-gray-50">
                                         <span class="inline-flex items-center w-full">
@@ -214,7 +227,7 @@
                                             <span class="ml-4">DTR</span>
                                         </span>
                                     </a>
-                                </li>
+                                </li> --}}
                                 <li>
                                     <a href="{{ route('coordinator.task') }}" title="#"
                                         class="inline-flex items-center w-full p-2 pl-3 text-sm font-light text-white rounded-lg hover:text-main group hover:bg-gray-50">
@@ -300,7 +313,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="" title="#"
+                                    <a href="{{ route('coordinator.supervisor-rating') }}" title=""
                                         class="inline-flex items-center w-full p-2 pl-3 text-sm font-light text-white rounded-lg hover:text-main group hover:bg-gray-50">
                                         <span class="inline-flex items-center w-full">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -373,8 +386,8 @@
                     </a>
                 </li>
                 <li>
-                    <a class="inline-flex items-center w-full px-4 py-2 mt-1  text-white transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main"
-                        href="">
+                    <a class="{{ request()->routeIs('coordinator.partner') ? 'bg-white text-main scale-95' : 'text-white' }} inline-flex items-center w-full px-4 py-2 mt-1   transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main"
+                        href="{{ route('coordinator.partner') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" class="lucide lucide-building-2">
@@ -457,13 +470,44 @@
                         <span class="ml-4"> Trainees </span>
                     </a>
                 </li>
+                <li>
+                    <a class="{{ request()->routeIs('supervisor.application') ? 'bg-white text-main scale-95' : 'text-white' }} inline-flex items-center w-full px-4 py-2 mt-1   transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main"
+                        href="{{ route('supervisor.application') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="lucide lucide-users-round">
+                            <path d="M18 21a8 8 0 0 0-16 0" />
+                            <circle cx="10" cy="8" r="5" />
+                            <path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3" />
+                        </svg>
+                        <span class="ml-4"> Applicants </span>
+                    </a>
+                </li>
             </ul>
             <p class="px-4 pt-5 text-xs font-semibold text-gray-300 uppercase">
                 MANAGEMENT
             </p>
             <ul>
-
                 <li>
+                    <a class="{{ request()->routeIs('supervisor.journal') ? 'bg-white text-main scale-95' : 'text-white' }} inline-flex items-center w-full px-4 py-2 mt-1   transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main"
+                        href="{{ route('supervisor.journal') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="lucide lucide-notebook-tabs-icon lucide-notebook-tabs">
+                            <path d="M2 6h4" />
+                            <path d="M2 10h4" />
+                            <path d="M2 14h4" />
+                            <path d="M2 18h4" />
+                            <rect width="16" height="20" x="4" y="2" rx="2" />
+                            <path d="M15 2v20" />
+                            <path d="M15 7h5" />
+                            <path d="M15 12h5" />
+                            <path d="M15 17h5" />
+                        </svg>
+                        <span class="ml-4"> Daily Journal </span>
+                    </a>
+                </li>
+                {{-- <li>
                     <a class="{{ request()->routeIs('supervisor.attendance') ? 'bg-white text-main scale-95' : 'text-white' }} inline-flex items-center w-full px-4 py-2 mt-1   transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main"
                         href="{{ route('supervisor.attendance') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -478,7 +522,7 @@
                         </svg>
                         <span class="ml-4"> Attendances </span>
                     </a>
-                </li>
+                </li> --}}
                 <li>
                     <a class="{{ request()->routeIs('supervisor.tasks') ? 'bg-white text-main scale-95' : 'text-white' }} inline-flex items-center w-full px-4 py-2 mt-1   transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main"
                         href="{{ route('supervisor.tasks') }}">
@@ -510,6 +554,22 @@
                             <path d="M10 18h4" />
                         </svg>
                         <span class="ml-4">Ratings</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="{{ request()->routeIs('supervisor.moa') ? 'bg-white text-main scale-95' : 'text-white' }} inline-flex items-center w-full px-4 py-2 mt-1   transition duration-200 ease-in-out transform rounded-lg focus:shadow-outline hover:bg-gray-100 hover:scale-95 hover:text-main"
+                        href="{{ route('supervisor.moa') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="lucide lucide-handshake-icon lucide-handshake">
+                            <path d="m11 17 2 2a1 1 0 1 0 3-3" />
+                            <path
+                                d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" />
+                            <path d="m21 3 1 11h-2" />
+                            <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" />
+                            <path d="M3 4h8" />
+                        </svg>
+                        <span class="ml-4">MOA</span>
                     </a>
                 </li>
                 <li>

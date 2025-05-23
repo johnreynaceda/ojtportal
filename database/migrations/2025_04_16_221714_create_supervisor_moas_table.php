@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('supervisor_moas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('supervisor_id');
+            $table->foreignId('coordinator_id');
             $table->date('expiration');
             $table->string('moa_file_path');
             $table->string('status')->default('pending');

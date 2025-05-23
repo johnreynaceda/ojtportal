@@ -12,4 +12,9 @@ class SupervisorMoa extends Model
     {
         return $this->belongsTo(Supervisor::class);
     }
+
+    public function coordinator()
+    {
+        return $this->belongsTo(Coordinator::class);
+    }
 }

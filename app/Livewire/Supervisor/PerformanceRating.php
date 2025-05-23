@@ -28,9 +28,18 @@ class PerformanceRating extends Component implements HasForms
 
     public $has_rating = false;
 
+    public $studentrated;
+
     public function mount()
     {
         $this->student_id = request('id');
+
+        if (auth()->user()->user_type == 'supervisor') {
+            $this->studentrated = SupervisorSurveyResponse::where('student_id', $this->student_id)->first() ? true : false;
+        } else {
+            $this->studentrated = CoordinatorStudentRate::where('student_id', $this->student_id)->first() ? true : false;
+        }
+
         // Use question ID as array key to prevent overwriting issues
         $this->points = CriteriaQuestion::all()->mapWithKeys(fn($question) => [
             $question->id => [
@@ -43,7 +52,11 @@ class PerformanceRating extends Component implements HasForms
         if (auth()->user()->user_type == 'supervisor') {
             $survey = SupervisorSurveyResponse::where('student_id', $this->student_id)->first();
         } else {
-            $survey = CoordinatorStudentRate::where('student_id', $this->student_id)->first();
+            if (request()->routeIs('coordinator.supervisor-rating-record', ['id' => $this->student_id])) {
+                $survey = SupervisorSurveyResponse::where('student_id', $this->student_id)->first();
+            } else {
+                $survey = CoordinatorStudentRate::where('student_id', $this->student_id)->first();
+            }
         }
         if ($survey) {
             $this->responses = json_decode($survey->responses, true);
@@ -102,12 +115,17 @@ class PerformanceRating extends Component implements HasForms
                 'student_id' => $this->student_id,
                 'responses' => json_encode($this->points),
             ]);
+            sweetalert()->success('Successfully rated');
+            $this->redirectRoute('supervisor.performance-rating', ['id' => $this->student_id]);
         } else {
             CoordinatorStudentRate::create([
                 'student_id' => $this->student_id,
                 'responses' => json_encode($this->points),
             ]);
+            sweetalert()->success('Successfully rated');
+            $this->redirectRoute('coordinator.survey-response', ['id' => $this->student_id]);
         }
+
 
     }
 

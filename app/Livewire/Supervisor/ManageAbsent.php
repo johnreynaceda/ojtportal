@@ -32,7 +32,7 @@ class ManageAbsent extends Component implements HasForms, HasTable
             ->query(Absent::query()->whereHas('trainee', function ($query) {
                 $query->where('supervisor_id', auth()->user()->supervisor->id);
             }))->headerActions([
-                    Action::make('back')->color('gray')->url(fn($record) => route('supervisor.attendance')),
+                    Action::make('back')->color('gray')->url(fn($record) => route('supervisor.journal')),
                     CreateAction::make('new')->icon(
                         'heroicon-o-plus'
                     )->form([
@@ -45,14 +45,12 @@ class ManageAbsent extends Component implements HasForms, HasTable
                                 ),
                                 DatePicker::make('date_of_absent')->required(),
                                 TextInput::make('total_hours')->numeric()->required(),
-                                Textarea::make('reason')->required(),
                             ])->modalWidth('xl')->action(
                             function ($data) {
                                 Absent::create([
                                     'trainee_id' => $data['trainee_id'],
                                     'date_of_absent' => $data['date_of_absent'],
-                                    'reason' => $data['reason'],
-                                    'total_hour' => $data['total_hours'],
+                                    'no_of_hours' => $data['total_hours'],
                                 ]);
                             }
                         )
@@ -60,7 +58,7 @@ class ManageAbsent extends Component implements HasForms, HasTable
             ->columns([
                 TextColumn::make('trainee.student.user.name')->label('TRAINEE')->searchable(),
                 TextColumn::make('date_of_absent')->date()->label('DATE OF ABSENT')->searchable(),
-                TextColumn::make('total_hour')->label('TOTAL HOUR')->searchable(),
+                TextColumn::make('no_of_hours')->label('TOTAL HOUR')->searchable(),
                 TextColumn::make('reason')->label('REASON')->searchable(),
             ])
             ->filters([

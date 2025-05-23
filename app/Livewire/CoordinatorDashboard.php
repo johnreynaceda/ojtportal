@@ -7,6 +7,7 @@ use App\Models\CoordinatorRating;
 use App\Models\CoordinatorStudentRate;
 use App\Models\DailyTimeRecord;
 use App\Models\Student;
+use App\Models\StudentJournal;
 use App\Models\SupervisorSurveyResponse;
 use App\Models\Task;
 use App\Models\Trainee;
@@ -47,14 +48,15 @@ class CoordinatorDashboard extends Component
                 $task_rating = $taskPercentage * 0.2;
 
                 // Attendance rate calculation
-                $absentHours = $student->trainee->absents->sum('total_hour');
-                $presentHours = DailyTimeRecord::where('trainee_id', $student->trainee->id)->sum('total_hours');
+                $absentHours = $student->trainee->absents->sum('no_of_hours');
+                $presentHours = StudentJournal::where('student_id', $student->trainee->id)->where('journal_status', 'approved')->where('status', '!=', 'Delayed')->sum('no_of_hours');
+
                 $attendance_rate = $presentHours > 0
                     ? ((($presentHours - $absentHours) / $presentHours) * 100) * 0.1
                     : 0;
 
                 // Journal rate calculation
-                $onTimeCount = $student->studentJournals->where('status', 'On-time')->count();
+                $onTimeCount = $student->studentJournals->where('journal_status', 'approved')->where('status', 'On-time')->count();
                 $journalCount = $student->studentJournals->count();
                 $journal_rate = $journalCount > 0
                     ? (($onTimeCount / $journalCount) * 100) * 0.1
@@ -78,11 +80,11 @@ class CoordinatorDashboard extends Component
                     $coordinator_rating = 27; // Default fallback if no response
                 }
 
-                $response = SupervisorSurveyResponse::where('student_id', $student->id)->first();
+                $supervisor_response = SupervisorSurveyResponse::where('student_id', $student->id)->first();
                 $total = 0;
 
-                if ($response && $response->responses) {
-                    $responses = json_decode($response->responses, true); // Decode JSON to array
+                if ($supervisor_response && $supervisor_response->responses) {
+                    $responses = json_decode($supervisor_response->responses, true); // Decode JSON to array
     
                     // Sum all earned points
                     foreach ($responses as $data) {
@@ -96,16 +98,26 @@ class CoordinatorDashboard extends Component
                 }
 
                 // Total score
-                $total = $task_rating + $attendance_rate + $journal_rate + $coordinator_rating + $supervisor_rating;
+                $total = round($task_rating) + round($attendance_rate) + round($journal_rate) + round($coordinator_rating) + round($supervisor_rating);
+
+                // $total_risk = 100 - $total;
+    
+                $category = '';
+                if ($total >= 86) {
+                    $category = 'Low';
+                } else {
+                    $category = 'high';
+                }
 
                 return [
                     'name' => $student_name,
                     'task_rating' => round($task_rating),
                     'attendance_rate' => round($attendance_rate),
                     'journal_rate' => round($journal_rate),
-                    'coordinator_rating' => $coordinator_rating,
-                    'supervisor_rating' => $supervisor_rating,
+                    'coordinator_rating' => round($coordinator_rating),
+                    'supervisor_rating' => round($supervisor_rating),
                     'total' => round($total, 2), // Keep decimals for sorting
+                    'category' => $category,
                 ];
             })
             ->sortByDesc('total')

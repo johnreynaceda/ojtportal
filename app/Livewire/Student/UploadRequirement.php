@@ -52,7 +52,14 @@ class UploadRequirement extends Component implements HasForms, HasTable
                 // ...
             ])
             ->actions([
-                DeleteAction::make('delete'),
+                DeleteAction::make('delete')->action(
+                    function ($record) {
+                        $record->update([
+                            'file_path' => null,
+                            'status' => null
+                        ]);
+                    }
+                )->visible(fn($record) => $record->file_path != null),
             ])
             ->bulkActions([
                 // ...

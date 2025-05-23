@@ -5,6 +5,7 @@ namespace App\Livewire\Coordinator;
 use App\Models\Coordinator;
 use App\Models\Shop\Product;
 use App\Models\Student;
+use App\Models\Supervisor;
 use App\Models\User;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
@@ -33,6 +34,10 @@ class UserList extends Component implements HasForms, HasTable
 
     public $user_data;
 
+    public $student = [];
+    public $supervisor = [];
+    public $supervisor_location;
+
     public function table(Table $table): Table
     {
         return $table
@@ -46,14 +51,14 @@ class UserList extends Component implements HasForms, HasTable
                                     TextInput::make('lastname')->label('Last Name')->required(),
                                 ]),
                                 Grid::make(2)->schema([
-                                    Select::make('course_handle')->label('Course Handle')->options([
-                                        'Intelligent System' => 'Intelligent System',
-                                        'Graphics and Visualization' => 'Graphics and Visualization',
-                                        'Animation and Motion Graphics' => 'Animation and Motion Graphics',
-                                        'Network Administration' => 'Network Administration',
-                                        'Service Management Program' => 'Service Management Program',
-                                        'Web and Mobile Application Development' => 'Web and Mobile Application Development',
-                                    ]),
+                                    // Select::make('course_handle')->label('Major Handle')->options([
+                                    //     'Intelligent System' => 'Intelligent System',
+                                    //     'Graphics and Visualization' => 'Graphics and Visualization',
+                                    //     'Animation and Motion Graphics' => 'Animation and Motion Graphics',
+                                    //     'Network Administration' => 'Network Administration',
+                                    //     'Service Management Program' => 'Service Management Program',
+                                    //     'Web and Mobile Application Development' => 'Web and Mobile Application Development',
+                                    // ]),
                                     TextInput::make('contact_number')->label('Contact Number')->numeric()->required(),
 
                                     TextInput::make('email')->label('Email')->email()->required(),
@@ -116,8 +121,41 @@ class UserList extends Component implements HasForms, HasTable
     }
     public function view($id)
     {
-        $this->viewData = true;
-        $this->user_data = User::where('id', $id)->with('supervisor')->first();
+        $user = User::where('id', $id)->first();
+        if ($user->user_type == 'student') {
+            $data = Student::where('id', $user->student->id)->first();
+            $this->student = [
+                'lastname' => $data->lastname,
+                'firstname' => $data->firstname,
+                'middlename' => $data->middlename,
+                'address' => $data->address,
+                'major' => $data->major,
+                'id' => $data->student_id,
+                'section' => $data->section,
+                'contact' => $data->student_contact,
+                'email' => $data->user->email,
+                'guardian' => $data->guardian_name,
+                'guardian_contact' => $data->guardian_contact,
+                'course' => $data->course->name,
+            ];
+            $this->dispatch('open-modal', id: 'view-user');
+        } else {
+
+            $data = Supervisor::where('id', $user->supervisor->id)->first();
+            $this->supervisor = [
+                'lastname' => $data->lastname,
+                'firstname' => $data->firstname,
+                'middlename' => $data->middlename,
+                'company_name' => $data->company_name,
+                'contact' => $data->contact_number,
+                'companyAddress' => $data->company_address,
+            ];
+
+            $this->supervisor_location = $data->locattion_path;
+
+            $this->dispatch('open-modal', id: 'view-supervisor');
+        }
+
     }
 
     public function updateStatus($id)
@@ -126,9 +164,11 @@ class UserList extends Component implements HasForms, HasTable
         $user->update([
             'is_approved' => !$user->is_approved
         ]);
-        $user->student->update([
-            'coordinator_id' => $user->is_approved ? auth()->user()->coordinator->id : null,
-        ]);
+        if ($user->user_type == 'student') {
+            $user->student->update([
+                'coordinator_id' => $user->is_approved ? auth()->user()->coordinator->id : null,
+            ]);
+        }
     }
 
     public function render()

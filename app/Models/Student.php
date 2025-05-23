@@ -32,4 +32,14 @@ class Student extends Model
     {
         return $this->hasMany(StudentJournal::class);
     }
+
+    public function studentCompanies()
+    {
+        return $this->hasMany(StudentCompany::class);
+    }
+
+    public function studentEvaluation()
+    {
+        return $this->hasOne(StudentEvaluation::class);
+    }
 }

@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('user_logs', function (Blueprint $table) {
             $table->id();
             $table->string('user_type')->nullable();
-            $table->foreignId('username')->nullable();
+            $table->string('username')->nullable();
             $table->dateTime('date')->nullable();
             $table->longText('activity')->nullable();
             $table->timestamps();

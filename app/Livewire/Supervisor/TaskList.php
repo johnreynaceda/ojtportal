@@ -5,6 +5,7 @@ namespace App\Livewire\Supervisor;
 use App\Models\Task;
 use App\Models\TaskAssignedStudent;
 use App\Models\Trainee;
+use App\Models\TrainingPlan;
 use App\Models\UserLog;
 use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
@@ -42,13 +43,13 @@ class TaskList extends Component implements HasForms, HasTable
                 [
                     CreateAction::make('new')->label('New Tasks')->icon('heroicon-o-plus')->form([
                         Grid::make(2)->schema([
-                            TextInput::make('name')->required(),
+                            Select::make('name')->options(TrainingPlan::all()->pluck('skills_to_learn', 'skills_to_learn')),
                             DatePicker::make('due_date'),
                             Textarea::make('description')->columnSpan(2),
                             Select::make('trainees')->options(
                                 Trainee::where('supervisor_id', auth()->user()->supervisor->id)->get()->mapWithKeys(
                                     function ($trainee) {
-                                        return [$trainee->id => $trainee->student->firstname . ' ' . $trainee->student->lastname];
+                                        return [$trainee->id => $trainee->student->user->name];
                                     }
                                 ),
                             )->multiple()->columnSpan(2),
@@ -129,7 +130,7 @@ class TaskList extends Component implements HasForms, HasTable
 
 
                         }
-                    )
+                    )->visible(fn($record) => $record->status == 'In Progress'),
                 ])
             ])
             ->bulkActions([

@@ -151,11 +151,11 @@
                     @endif
 
                 </div>
-                @if (!$has_rating)
-                    <div class="mt-5">
+                <div class="mt-5">
+                    @if (!$studentrated)
                         <x-button label="Submit Rating" wire:click="submitRating" />
-                    </div>
-                @endif
+                    @endif
+                </div>
             </div>
         </div>
     </div>

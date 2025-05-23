@@ -54,7 +54,7 @@ class LoginRequest extends FormRequest
         UserLog::create([
             'user_type' => auth()->user()->user_type,
             'username' => auth()->user()->name,
-            'date' => Carbon::now(),
+            'date' => now(),
             'activity' => 'Login',
         ]);
 

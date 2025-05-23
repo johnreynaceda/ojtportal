@@ -22,4 +22,9 @@ class Supervisor extends Model
     {
         return $this->hasOne(SupervisorMoa::class);
     }
+
+    public function studentCompanies()
+    {
+        return $this->hasMany(StudentCompany::class);
+    }
 }

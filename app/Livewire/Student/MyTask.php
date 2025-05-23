@@ -35,18 +35,14 @@ class MyTask extends Component implements HasForms, HasTable
                 TextColumn::make('name')->label('NAME')->searchable(),
                 TextColumn::make('description')->label('DESCRIPTION')->searchable(),
                 TextColumn::make('due_date')->date()->label('DUE DATE')->searchable()->formatStateUsing(function ($state) {
-                    // Calculate the difference from now
-                    $dueDate = Carbon::parse($state);
-                    $now = Carbon::now();
+                    $dueDate = Carbon::parse($state)->startOfDay();
+                    $now = Carbon::now()->startOfDay();
 
                     if ($now->greaterThan($dueDate)) {
-                        return 'Overdue'; // Optionally handle past due dates
+                        return 'Overdue';
                     }
 
-                    return $dueDate->diffForHumans($now, [
-                        'parts' => 2, // Display up to 2 parts, e.g., "1 day 3 hours"
-                        'short' => true, // Use short units, e.g., "1d 3h"
-                    ]);
+                    return 'Not due';
                 }),
                 TextColumn::make('status')->badge()->label('STATUS')->searchable()->color(fn(string $state): string => match ($state) {
                     'In Progress' => 'warning',
@@ -62,15 +58,14 @@ class MyTask extends Component implements HasForms, HasTable
                     ->button()->color('success')->visible(fn($record) => $record->status == 'In Progress')
                     ->icon('heroicon-m-check-circle')->outlined()->action(
                         function ($record) {
-                            $currentDate = now(); // Get the current date and time
-                            $dueDate = $record->due_date;
+                            $currentDate = Carbon::now()->startOfDay();
+                            $dueDate = Carbon::parse($record->due_date)->startOfDay();
 
-                            if ($dueDate < $currentDate) {
+                            if ($dueDate->lt($currentDate)) {
                                 $record->update([
                                     'status' => 'Delayed',
                                 ]);
                             } else {
-                                // If due date is not in the past, set status to 'completed'
                                 $record->update([
                                     'status' => 'Completed',
                                 ]);

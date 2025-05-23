@@ -49,7 +49,7 @@
                     <template x-for="star in max_stars">
                         <li @mouseover="hoverStar(star)" @mouseleave="mouseLeftStar" @click="rate(star)"
                             class="px-1 cursor-pointer" :class="{ 'text-gray-400 cursor-not-allowed': disabled }">
-                            <svg x-show="star > stars" class="w-10 h-10 text-yellow-900"
+                            <svg x-show="star > stars" class="w-10 h-10 text-gray-900"
                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
                                 <rect width="256" height="256" fill="none" />
                                 <path
@@ -57,7 +57,7 @@
                                     fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="16" />
                             </svg>
-                            <svg x-show="star <= stars" class="w-10 h-10 text-gray-500 fill-current"
+                            <svg x-show="star <= stars" class="w-10 h-10 text-yellow-500 fill-current"
                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
                                 <rect width="256" height="256" fill="none" />
                                 <path

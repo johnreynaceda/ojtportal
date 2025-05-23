@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->foreignId('student_id');
             $table->foreignId('supervisor_id');
             $table->string('resume_path')->nullable();
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }

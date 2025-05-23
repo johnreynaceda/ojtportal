@@ -23,7 +23,8 @@ class User extends Authenticatable
         'password',
         'user_type',
         'course_id',
-        'is_approved'
+        'is_approved',
+        'profile_photo_path',
     ];
 
     /**
