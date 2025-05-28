@@ -105,8 +105,10 @@ class CoordinatorDashboard extends Component
                 $category = '';
                 if ($total >= 86) {
                     $category = 'Low';
+                } elseif ($total >= 80 && $total <= 85) {
+                    $category = 'Medium';
                 } else {
-                    $category = 'high';
+                    $category = 'High';
                 }
 
                 return [

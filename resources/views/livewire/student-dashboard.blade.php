@@ -24,7 +24,6 @@
                                     $approved_dtr = auth()
                                         ->user()
                                         ->student->studentJournals->where('journal_status', 'approved')
-                                        ->where('status', '!=', 'Delayed')
                                         ->sum('no_of_hours');
                                     $remaining_hours = 400 - $approved_dtr;
                                 } else {

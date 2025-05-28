@@ -135,8 +135,8 @@
                                                     {{ $student['total'] }}</td>
                                                 <td class="p-2 px-4 text-sm font-medium text-gray-900">
                                                     @switch($student['category'])
-                                                        @case('medium')
-                                                            <x-badge label="Medium" warning />
+                                                        @case('Low')
+                                                            <x-badge label="Low" warning />
                                                         @break
 
                                                         @case('high')
